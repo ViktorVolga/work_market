@@ -1,0 +1,16 @@
+FROM ubuntu:latest as work_market_image
+RUN apt update
+RUN apt upgrade -y
+RUN apt-get install -y gcc
+RUN apt-get install -y g++
+RUN apt-get install -y make
+RUN apt-get install -y cmake
+RUN mkdir /devel/
+RUN mkdir /devel/work_market/
+RUN apt-get install -y libcurl4-openssl-dev
+
+#for compilation image:  docker build . -f dockerfile.txt -t work_market_image
+
+#docker run --name work_market -v "$(pwd)":/devel/work_market -it ubuntu:latest /bin/bash
+
+#docker exec -it work_market bash
