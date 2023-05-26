@@ -31,7 +31,7 @@ void Request::set_options()
     curl_easy_setopt(my_curl, CURLOPT_HEADER, 1);
     list = curl_slist_append(list, my_header.c_str());
     curl_easy_setopt(my_curl, CURLOPT_HTTPHEADER, list);
-    //curl_easy_setopt(my_curl, CURLOPT_HTTPGET, 1L);
+    //curl_easy_setopt(my_curl, CURLOPT_HTTPGET, 1L);З
     //curl_easy_setopt(my_curl, CURLOPT_WRITEDATA, stdout);
     std::cout << "[Request::set_options] - ok" << std::endl; 
 

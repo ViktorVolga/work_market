@@ -9,6 +9,14 @@ RUN mkdir /devel/
 RUN mkdir /devel/work_market/
 RUN apt-get install -y libcurl4-openssl-dev
 
+#adding spdlog
+RUN mkdir -p /home/libs/spdlog \
+    apt-get install -y git \
+    git clone https://github.com/gabime/spdlog.git /home/libs/spdlog/ \
+    cd /home/libs/spdlog && mkdir build && cd build \
+    cmake .. && make -j
+
+
 #for compilation image:  docker build . -f dockerfile.txt -t work_market_image
 
 #docker run --name work_market -v "$(pwd)":/devel/work_market -it ubuntu:latest /bin/bash
