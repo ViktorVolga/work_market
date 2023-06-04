@@ -11,6 +11,9 @@ add_executable(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/web_request.cpp
 )
 
+#####################################################################
+###########add google test's#########################################
+
 include(ExternalProject)
 
 ExternalProject_Add(
@@ -58,6 +61,12 @@ if(CURL_FOUND)
 endif()
 
 ####################################################################
-####################################################################
+########################spdlog#####################################
 
+set(spdlog_DIR "/home/libs/spdlog/build/")
 find_package(spdlog REQUIRED)
+
+
+add_library(spdlog STATIC IMPORTED)
+target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
+include_directories("/home/libs/spdlog/include")

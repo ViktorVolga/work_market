@@ -4,6 +4,7 @@
 #include <memory>
 #include <iostream>
 #include <string>
+#include "logger.h"
 
 class Request{
     CURL *my_curl;
@@ -22,5 +23,13 @@ public:
     void take_answer();
     void print_answer();
     void add_options_in_request(std::string options);
+    void test_logger();
 };
+
+ enum class vacansy_parameters{
+    per_page,
+    text,
+    area,
+
+ };
 

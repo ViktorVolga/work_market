@@ -4,9 +4,9 @@ Request::Request()
 {
     uint8_t temp = init_my_curl();
     if(temp)
-        std::cout << "init_my_curl: eror" << std::endl;
+        web_logger()->error("init_my_curl: eror");
     else
-       std::cout << "curl init - ok" << std::endl;     
+       web_logger()->info("init_my_curl: ok");     
 }
 
 Request::~Request()
@@ -27,27 +27,22 @@ uint8_t Request::init_my_curl()
 void Request::set_options()
 {
     curl_easy_setopt(my_curl, CURLOPT_URL, my_url.c_str());    
-    // curl_easy_setopt(my_curl, CURLOPT_WRITEFUNCTION, read_from_api);
     curl_easy_setopt(my_curl, CURLOPT_HEADER, 1);
     list = curl_slist_append(list, my_header.c_str());
     curl_easy_setopt(my_curl, CURLOPT_HTTPHEADER, list);
-    //curl_easy_setopt(my_curl, CURLOPT_HTTPGET, 1L);З
-    //curl_easy_setopt(my_curl, CURLOPT_WRITEDATA, stdout);
-    std::cout << "[Request::set_options] - ok" << std::endl; 
-
+    web_logger()->info("set_options: ok");   
 }
+
 void Request::take_answer()
-{
-    std::cout << "[Request::take_answer] - start" << std::endl;    
+{        
     response = curl_easy_perform(my_curl);
     if(response != CURLE_OK)
     {
-        std::cout << "[Request::take_answer] can't take response" << std::endl;
-        std::cout << curl_easy_strerror(response) << std::endl;
+        web_logger()->error("take_answer: can't take response %s", curl_easy_strerror(response));        
     }
     else
     {
-        std::cout << "[Request::take_answer] - ok" << std::endl;
+        web_logger()->info("take_answer - ok");        
     }
            
 }
@@ -71,6 +66,12 @@ void Request::add_options_in_request(std::string options)
     }
     std::cout << my_url << std:: endl;
 }
+
+void Request::test_logger()
+{
+    web_logger()->info("gavno");
+}
+
 /*
 size_t Request::read_from_api(void *buffer, size_t size, size_t received, void *my_received_data)
 {
