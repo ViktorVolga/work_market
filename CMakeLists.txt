@@ -70,3 +70,15 @@ find_package(spdlog REQUIRED)
 add_library(spdlog STATIC IMPORTED)
 target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
 include_directories("/home/libs/spdlog/include")
+
+####################################################################
+                      ### SQL ###
+
+include_directories("/usr/include/mysql")
+
+#Boost
+
+find_package(Boost REQUIRED COMPONENTS headers)
+find_package(Threads REQUIRED)
+find_package(OpenSSL REQUIRED)
+target_link_libraries(${PROJECT_NAME} Boost::headers Threads::Threads OpenSSL::Crypto OpenSSL::SSL)

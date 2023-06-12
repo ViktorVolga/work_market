@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/home/libs/spdlog/include"
+                "/home/libs/spdlog/include",
+                "/usr/include/mysql"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

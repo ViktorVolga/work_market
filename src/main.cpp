@@ -1,14 +1,13 @@
 #include <iostream>
 #include "web_request.h"
 #include "logger.h"
+#include "sql.h"
 #define DEBUG_VERSION 
 
 int main(){
     
     Request request;
-    request.add_options_in_request("text=C++");          
-    request.set_options();
-    request.take_answer();
-    request.print_answer();    
+    SQLHandler _sql;
+      
     return 0;
 }

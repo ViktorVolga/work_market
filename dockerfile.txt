@@ -17,6 +17,24 @@ RUN cmake -S /home/libs/spdlog/ -B /home/libs/spdlog/build/
 RUN make /home/libs/spdlog/build/  
 RUN mkdir /home/logs/
 
+###sql
+RUN apt-get install mysql-server
+RUN apt-get install libmysqlclient-dev
+RUN service mysql start
+
+#getting wget
+RUN apt-get install -y wget
+
+#getting bzip
+RUN apt-get install -y bzip2
+
+#boost
+RUN mkdir /home/libs/boost
+RUN wget --continue --directory-prefix=/home/libs/boost/ https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2
+RUN tar --directory=/home/libs/boost/ --checkpoint=1000 --bzip2 -xf /home/libs/boost/boost_1_82_0.tar.bz2
+RUN cd /home/libs/boost/boost_1_82_0/
+RUN ./bootstrap.sh
+RUN ./b2 install
 
 #for compilation image:  docker build . -f dockerfile.txt -t work_market_image
 
