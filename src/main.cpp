@@ -4,10 +4,12 @@
 #include "sql.h"
 #define DEBUG_VERSION 
 
-int main(){
-    
-    Request request;
-    SQLHandler _sql;
-      
+
+int main()
+{
+    SQLHandler m_sql;
+    m_sql.connect();
+
+
     return 0;
 }

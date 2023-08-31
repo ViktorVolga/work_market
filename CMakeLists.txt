@@ -9,9 +9,10 @@ add_executable(
     work_market
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/web_request.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/sql.cpp
 )
 
-#####################################################################
+
 ###########add google test's#########################################
 
 include(ExternalProject)
@@ -47,7 +48,6 @@ include_directories("${source_dir}/googletest/include"
                 "${source_dir}/src"
 )
 
-####################################################################
 ######################add libcurl libraries#########################
 
 set(CURL_LIBRARY "-lcurl")
@@ -60,7 +60,6 @@ if(CURL_FOUND)
     target_link_libraries(${PROJECT_NAME} ${CURL_LIBRARIES})
 endif()
 
-####################################################################
 ########################spdlog#####################################
 
 set(spdlog_DIR "/home/libs/spdlog/build/")
@@ -73,8 +72,9 @@ include_directories("/home/libs/spdlog/include")
 
 ####################################################################
                       ### SQL ###
+                      
+target_link_libraries(${PROJECT_NAME} mysqlcppconn)
 
-include_directories("/usr/include/mysql")
 
 #Boost
 

@@ -21,6 +21,9 @@ RUN mkdir /home/logs/
 RUN apt-get install mysql-server
 RUN apt-get install libmysqlclient-dev
 RUN service mysql start
+RUN mysql
+RUN ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+RUN exit
 
 #getting wget
 RUN apt-get install -y wget
@@ -35,6 +38,13 @@ RUN tar --directory=/home/libs/boost/ --checkpoint=1000 --bzip2 -xf /home/libs/b
 RUN cd /home/libs/boost/boost_1_82_0/
 RUN ./bootstrap.sh
 RUN ./b2 install
+
+RUN apt-get install -y pkg-config
+RUN apt-get install dpkg-dev
+
+RUN apt-get install libmysqlcppconn-dev
+
+#if not enoght cloning from git-hub
 
 #for compilation image:  docker build . -f dockerfile.txt -t work_market_image
 
