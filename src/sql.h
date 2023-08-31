@@ -23,6 +23,14 @@ boost connection*/
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
 
+enum class ConnectOptions
+{
+    host_name, 
+    user_name,
+    port,
+    password,
+};
+
 class SQLHandler{
     sql::Driver * m_driver;
     sql::Connection * m_con;
@@ -37,12 +45,6 @@ public:
     void connect();      
 };
 
-enum class ConnectOptions
-{
-    host_name, 
-    user_name,
-    port,
-    password,
-};
+
 
 #endif

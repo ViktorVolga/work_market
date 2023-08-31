@@ -23,8 +23,7 @@ uint8_t SQLHandler::get_driver()
     {
         std::cout <<  "sql.driver got - ok" << std::endl;
         return 0;
-    }   
-    
+    }    
 }
 
 void SQLHandler::set_properties(const ConnectOptions &option, const std::string &value)
@@ -38,7 +37,7 @@ void SQLHandler::set_properties(const ConnectOptions &option, const std::string 
             m_connection_properties["password"] = value;
             break;
         case ConnectOptions::port :
-            m_connection_properties["port"] = value;
+            m_connection_properties["port"] = std::stoi(value);
             break;
         case ConnectOptions::user_name :
             m_connection_properties["username"] = value;
