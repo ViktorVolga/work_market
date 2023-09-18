@@ -2,7 +2,12 @@
 
 SQLHandler::SQLHandler()
 {
-
+    get_driver();
+    set_properties(ConnectOptions::host_name, "tcp://127.0.0.1");
+    set_properties(ConnectOptions::port, "3306");
+    set_properties(ConnectOptions::user_name, "root");
+    set_properties(ConnectOptions::password, "root");
+    connect();
 }
 
 SQLHandler::~SQLHandler()

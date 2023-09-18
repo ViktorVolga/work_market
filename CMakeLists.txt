@@ -10,6 +10,8 @@ add_executable(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/web_request.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/sql.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/app.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/json.cpp
 )
 
 
@@ -82,3 +84,10 @@ find_package(Boost REQUIRED COMPONENTS headers)
 find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
 target_link_libraries(${PROJECT_NAME} Boost::headers Threads::Threads OpenSSL::Crypto OpenSSL::SSL)
+
+include(FetchContent)
+
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
+FetchContent_MakeAvailable(json)
+
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)

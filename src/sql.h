@@ -45,6 +45,15 @@ public:
     void connect();      
 };
 
+class SQLRequest : public SQLHandler
+{
+    public :
+    SQLRequest() = default;
+    virtual ~SQLRequest();
+    virtual void send_request(const std::string &request) = 0;
+    virtual int get_answer() = 0;
+};
+
 
 
 #endif
