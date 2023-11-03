@@ -2,12 +2,15 @@
 
 #include "web_request.h"
 #include "json.h"
+#include <memory>
+#include <queue>
+
+
 
 class App
-{
-   ProfessionRequest my_request{ProfessionRequest()};
+{    
 public:
-    App();
+    App();    
     void take_request();
     void get_json();    
 };

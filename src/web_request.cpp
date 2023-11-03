@@ -19,11 +19,7 @@ static size_t write_answer(void *data, size_t size, size_t nmemb, char *userdata
 
 Request::Request()
 {
-    uint8_t temp = init_my_curl();
-    if(temp)
-        web_logger()->error("init_my_curl: eror");
-    else
-       web_logger()->info("init_my_curl: ok");     
+        
 }
 
 Request::~Request()
@@ -34,24 +30,39 @@ Request::~Request()
 
 uint8_t Request::init_my_curl()
 {
+    uint8_t temp = init_my_curl();
+    if(temp)
+    {
+        web_logger()->error("init_my_curl: eror");
+        return 1;
+    }        
+    else
+       web_logger()->info("init_my_curl: ok");
+
     curl_global_init(CURL_GLOBAL_ALL);
     my_curl = curl_easy_init();
+
     if(my_curl != nullptr)
         return 0;
-    return 1; /*error*/    
+    else
+        return 1; /*error*/    
 }
 
 void Request::set_options()
 {       
     curl_easy_setopt(my_curl, CURLOPT_HEADER, 1);
     list = curl_slist_append(list, my_header.c_str());
-    curl_easy_setopt(my_curl, CURLOPT_HTTPHEADER, list);
-    web_logger()->info("set_options: ok");
-    curl_easy_setopt(my_curl, CURLOPT_WRITEFUNCTION, write_answer);   
+    curl_easy_setopt(my_curl, CURLOPT_HTTPHEADER, list);    
+    curl_easy_setopt(my_curl, CURLOPT_WRITEFUNCTION, write_answer);
+    web_logger()->info("set_options: ok");   
 }
 
 void Request::take_answer()
-{        
+{   
+    /*todo later reserve can throw exception*/
+    my_response.reserve(static_cast<ssize_t>(CURL_MAX_WRITE_SIZE));       
+    curl_easy_setopt(my_curl, CURLOPT_WRITEFUNCTION, &Request::read_from_api);
+    curl_easy_setopt(my_curl, CURLOPT_WRITEDATA, (void *)my_response.data());      
     response = curl_easy_perform(my_curl);
     if(response != CURLE_OK)
     {
@@ -61,8 +72,9 @@ void Request::take_answer()
     {
         web_logger()->info("take_answer - ok");        
     }
-           
+    my_response.shrink_to_fit();           
 }
+
 void Request::print_answer()
 {
     std::cout << response << std::endl;
@@ -88,7 +100,7 @@ void Request::add_options_in_request(const std::string &options)
 
 void Request::test_logger()
 {
-    web_logger()->info("gavno");
+    web_logger()->info("test");
 }
 
 void Request::add_standart_option(const vacansy_parameters &parameter, const std::string &option)
@@ -109,8 +121,8 @@ void Request::set_url()
 }  
 
 void Request::print_transaction_info()
-{
-    char * info;
+{    
+    char *info;
     CURLcode res = curl_easy_getinfo(my_curl, CURLINFO_EFFECTIVE_URL, &info);
     web_logger()->info("last url [{}]", info);
 }
@@ -123,10 +135,24 @@ std::string ProfessionRequest::get_from_api(const vacansy_parameters &parameter,
     return answer;    
 }
 
-/*
-size_t Request::read_from_api(void *buffer, size_t size, size_t received, void *my_received_data)
+
+size_t Request::read_from_api(void *ptr, size_t size, size_t nmemb, void* userdata)
 {
-    my_received_data.append((char*)buffer, size *received);
-    return size *received;
+    ssize_t realsize = size * nmemb;
+    memmove(userdata, ptr, realsize);
+    return realsize;
 }
-*/
+
+ProfessionRequest::ProfessionRequest(specializations_t specialization)
+{
+    auto ret = init_my_curl();
+    my_spec = std::move(specialization);          
+}
+
+void ProfessionRequest::execute_request()
+{
+    
+}
+
+
+
