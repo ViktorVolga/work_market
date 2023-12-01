@@ -1,4 +1,4 @@
-#include "app.h"
+#include "my_app.h"
 
 App::App()
 {

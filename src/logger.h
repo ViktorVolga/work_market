@@ -9,12 +9,19 @@
 static spdlog::sink_ptr console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 static spdlog::sink_ptr file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("/home/logs/web.log", true);
 static spdlog::sinks_init_list sink_list = { file_sink, console_sink };
-static const std::shared_ptr<spdlog::logger> web_logger_ptr = std::make_shared<spdlog::logger>("web_request", sink_list.begin(), sink_list.end());
+static std::shared_ptr<spdlog::logger> web_logger_ptr;
 
 
 static const std::shared_ptr<spdlog::logger>& web_logger()
 {    
-    return web_logger_ptr;    
+    if(web_logger_ptr)
+        return web_logger_ptr; 
+    else
+    {
+        web_logger_ptr = std::make_shared<spdlog::logger>("web_request", sink_list.begin(), sink_list.end());
+        return web_logger_ptr; 
+    }
+           
 }
 
 

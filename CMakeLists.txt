@@ -10,45 +10,21 @@ add_executable(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/web_request.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/sql.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/app.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/my_app.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/json.cpp
 )
 
+add_library(web_request SHARED 
+${CMAKE_CURRENT_SOURCE_DIR}/src/web_request.h 
+${CMAKE_CURRENT_SOURCE_DIR}/src/web_request.cpp)
+
+target_include_directories(web_request PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/)
 
 ###########add google test's#########################################
 
-include(ExternalProject)
+enable_testing()
 
-ExternalProject_Add(
-gtest
-URL https://github.com/google/googletest/archive/master.zip
-PREFIX ${CMAKE_CURRENT_BINARY_DIR}/gtest
-# Disable install step
-INSTALL_COMMAND ""
-)
-
-ExternalProject_Get_Property(gtest source_dir binary_dir)
-
-add_library(libgtest IMPORTED STATIC GLOBAL)
-add_dependencies(libgtest gtest)
-
-set_target_properties(libgtest PROPERTIES
-   "IMPORTED_LOCATION" "${binary_dir}/googlemock/gtest/libgtest.a"
-   "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
-)
-
-add_library(libgmock IMPORTED STATIC GLOBAL)
-add_dependencies(libgmock gtest)
-
-set_target_properties(libgmock PROPERTIES
-    "IMPORTED_LOCATION" "${binary_dir}/googlemock/libgmock.a"
-    "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
-)
-
-include_directories("${source_dir}/googletest/include"
-                "${source_dir}/googlemock/include"
-                "${source_dir}/src"
-)
+add_subdirectory(tests)
 
 ######################add libcurl libraries#########################
 
