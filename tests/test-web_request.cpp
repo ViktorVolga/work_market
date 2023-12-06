@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
+#include <web_request.h>
 
-TEST(sample_test_case, sample_test)
+TEST(web_reques_sut, get_num_pages_test)
 {
-    EXPECT_EQ(1, 1);
+    
 }
 
 int main(int argc, char** argv)

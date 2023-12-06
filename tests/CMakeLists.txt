@@ -7,4 +7,4 @@ target_link_libraries(test-web_request
   GTest::GTest
   web_request)
 
-  add_test(web_request_tests test-web_request)
+add_test(web_request_tests test-web_request)
