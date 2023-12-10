@@ -23,20 +23,6 @@ add_executable(
 
 target_link_libraries(work_market web_request)
 
-######################add libcurl libraries#########################
-
-set(CURL_LIBRARY "-lcurl")
-
-find_package(CURL REQUIRED)
-
-if(CURL_FOUND)
-    add_library(curl STATIC IMPORTED)
-    add_definitions(-DCURL_STATICLIB)
-    target_link_libraries(${PROJECT_NAME} ${CURL_LIBRARIES})
-endif()
-
-########################spdlog#####################################
-
 set(spdlog_DIR "/home/libs/spdlog/build/")
 find_package(spdlog REQUIRED)
 

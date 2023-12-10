@@ -1,4 +1,5 @@
 #include "include/web_request.h"
+#include "web_request.h"
 
 static std::string answer;
 static int ptr_count;
@@ -70,7 +71,7 @@ void Request::take_answer()
         web_logger()->info("take_answer - ok");        
     }    
     web_logger()->info("readed {} byte from API", ptr_count);
-    my_response.resize(ptr_count);           
+    my_response.resize(ptr_count);                   
 }
 
 void Request::print_answer()
@@ -105,10 +106,15 @@ void Request::add_standart_option(const vacansy_parameters &parameter, const std
 {
     switch (parameter)
     {
-        case vacansy_parameters::specialization :
+        case (vacansy_parameters::specialization) :
+        {
             std::string to_request {"text="};
             to_request.append(option);
             add_options_in_request(to_request);
+            break;
+        }
+            
+        default :
             break;
     }
 }
@@ -121,13 +127,18 @@ void Request::set_url()
 void Request::print_transaction_info()
 {    
     char *info;
-    CURLcode res = curl_easy_getinfo(my_curl, CURLINFO_EFFECTIVE_URL, &info);
+    curl_easy_getinfo(my_curl, CURLINFO_EFFECTIVE_URL, &info);
     web_logger()->info("last url [{}]", info);
 }
 
 std::string &Request::get_response()
 {
     return my_response;
+}
+
+nlohmann::json & Request::get_json()
+{
+    return my_json;
 }
 
 std::string ProfessionRequest::get_from_api(const vacansy_parameters &parameter, const std::string &request)
@@ -158,7 +169,11 @@ size_t Request::read_from_api(void *ptr, size_t size, size_t nmemb, void* userda
 
 ProfessionRequest::ProfessionRequest(specializations_t specialization)
 {
-    auto ret = init_my_curl();
+    auto ret = init_my_curl();    
+    if (ret)
+    {
+        web_logger()->error("filed to init_my_curl");
+    }
     my_spec = std::move(specialization);
     set_options();  
     set_specialization();
@@ -224,4 +239,28 @@ request_t &RequestHandler::get_request()
     }
 }
 
+int RequestHandler::get_num_pages_in_request(request_t &req)
+{
+    std::string response = req->get_response();
 
+    /*find num pages in request*/
+    auto pos = response.find("pages");
+    if(pos == std::string::npos)
+    {
+        web_logger()->debug("request not consider num pages");
+        return -1;
+    }
+    else
+    {
+        pos += 7;
+        std::string sub_string{};
+        while(response.at(pos) != ',')
+        {
+            sub_string.push_back(response.at(pos));
+            pos++;
+        }
+        int num_pages = stoul(sub_string);
+         web_logger()->debug("num_pages  in request {}", num_pages);
+        return num_pages;
+    }    
+}

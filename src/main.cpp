@@ -6,7 +6,8 @@ int main()
     request_t request = std::make_unique<ProfessionRequest>(specializations_t::cpp);        
     rh.add_request(request);
     request_t &my_req = rh.get_request();
-    my_req->execute_request();   
+    my_req->execute_request();  
+    rh.get_num_pages_in_request(my_req); 
     
     return 0;
 }
