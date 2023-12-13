@@ -14,6 +14,11 @@ TEST(web_reques_sut, get_num_pages_test)
     EXPECT_LE(num_pages_in_request, 32600);
 }
 
+TEST(web_request_sut, parsing_web_request_add_requests_in_queue)
+{
+    
+}
+
 int main(int argc, char** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

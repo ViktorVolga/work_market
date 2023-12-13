@@ -26,3 +26,5 @@ FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download
 FetchContent_MakeAvailable(json)
 
 target_link_libraries(web_request nlohmann_json::nlohmann_json)
+
+add_library(vacansy vacansy.cpp)
