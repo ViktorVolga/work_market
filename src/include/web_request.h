@@ -4,9 +4,11 @@
 #include <memory>
 #include <iostream>
 #include <string>
-#include "logger.h"
 #include <queue>
 #include <nlohmann/json.hpp>
+
+#include "logger.h"
+#include "request_parser.h"
 
 enum class vacansy_parameters{
     specialization,
@@ -62,11 +64,14 @@ public:
     void set_specialization();
 };
 
+typedef std::unique_ptr<RequestParser> req_parser_ptr_t;
+
 class RequestHandler
 {
     request_t my_request;
     std::queue<request_t> my_req_queue;
-public:
+    req_parser_ptr_t my_request_parser;
+public:    
     void add_request(request_t &req);
     request_t &get_request();
     void run();

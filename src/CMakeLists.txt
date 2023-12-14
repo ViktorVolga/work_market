@@ -28,3 +28,7 @@ FetchContent_MakeAvailable(json)
 target_link_libraries(web_request nlohmann_json::nlohmann_json)
 
 add_library(vacansy vacansy.cpp)
+
+add_library(request_parser request_parser.cpp)
+
+target_link_libraries(web_request request_parser)

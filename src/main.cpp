@@ -1,5 +1,5 @@
 #include "include/web_request.h"
-
+#include "include/request_parser.h"
 int main()
 {   
     RequestHandler rh;
@@ -7,7 +7,8 @@ int main()
     rh.add_request(request);
     request_t &my_req = rh.get_request();
     my_req->execute_request();  
-    rh.get_num_pages_in_request(my_req); 
+    rh.get_num_pages_in_request(my_req);
+    HHRequestParser req_parser = HHRequestParser(&rh); 
     
     return 0;
 }

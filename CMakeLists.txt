@@ -21,7 +21,7 @@ add_executable(
 #    ${CMAKE_CURRENT_SOURCE_DIR}/src/json.cpp
 )
 
-target_link_libraries(work_market web_request)
+target_link_libraries(work_market web_request request_parser)
 
 set(spdlog_DIR "/home/libs/spdlog/build/")
 find_package(spdlog REQUIRED)
