@@ -2,6 +2,23 @@
 
 #include <string>
 #include <vector>
+#include <memory>
+#include <queue>
+
+enum class Expirience
+{
+    no_expirince,
+    one_three_year,
+    more_three_year,
+};
+
+enum class Level
+{
+    june,
+    midle,
+    senior,
+    unknown,
+};
 
 class Vacansy
 {
@@ -26,7 +43,7 @@ public:
     void set_my_country(std::string &country);
     const std::string & get_my_country();
     void set_my_sity(std::string &sity);
-    const  std::string & get_my_sity();
+    const std::string & get_my_sity();
     void set_is_open(bool open);
     bool get_is_open();
     void set_my_url(std::string &url);
@@ -38,24 +55,15 @@ public:
     void set_my_expirience(Expirience & expirience);
     const Expirience get_my_expirience();
     void set_my_description(std::string & description);
-    const std::string & get_my_descripton();
-    void add_skill(const)
-
-
-
+    const std::string & get_my_descripton();    
 };
 
-enum class Expirience
-{
-    no_expirince,
-    one_three_year,
-    more_three_year,
-};
+typedef std::unique_ptr<Vacansy> vacansy_ptr_t; 
 
-enum class Level
+class VacansyHandler
 {
-    june,
-    midle,
-    senior,
-    unknown,
+    vacansy_ptr_t my_vacancy;
+    std::queue<vacansy_ptr_t> my_vacansy_queue_t;
+public:
+
 };

@@ -4,8 +4,11 @@
 #include <memory>
 #include <iostream>
 #include <string>
-#include "logger.h"
 #include <queue>
+#include <nlohmann/json.hpp>
+
+#include "logger.h"
+#include "request_parser.h"
 
 enum class vacansy_parameters{
     specialization,
@@ -27,7 +30,9 @@ class Request{
     CURLcode response;
     uint8_t m_count_options = 0;
     struct curl_slist *list = nullptr;
-    std::string my_response;    
+    std::string my_response;
+    std::unique_ptr<char> my_data;
+    nlohmann::json my_json;    
 public:    
     Request();
     virtual ~Request();
@@ -42,7 +47,9 @@ public:
     void set_url(); 
     void print_transaction_info();
     virtual void execute_request() = 0;
-    virtual std::string get_from_api(const vacansy_parameters &parameter, const std::string &request) = 0;         
+    virtual std::string get_from_api(const vacansy_parameters &parameter, const std::string &request) = 0;
+    std::string &get_response();
+    nlohmann::json & get_json();             
 };
 
 typedef std::unique_ptr<Request> request_t;
@@ -54,14 +61,21 @@ public:
     ProfessionRequest(specializations_t specialization);
     std::string get_from_api(const vacansy_parameters &parameter, const std::string &request);
     void execute_request() override;
+    void set_specialization();
 };
+
+typedef std::unique_ptr<RequestParser> req_parser_ptr_t;
 
 class RequestHandler
 {
     request_t my_request;
     std::queue<request_t> my_req_queue;
-public:
-    void add_request(request_t req);
+    req_parser_ptr_t my_request_parser;
+public:    
+    void add_request(request_t &req);
+    request_t &get_request();
+    void run();
+    int get_num_pages_in_request(request_t & req);    
 };
 
  

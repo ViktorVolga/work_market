@@ -1,11 +1,16 @@
+#include "include/web_request.h"
 #include "web_request.h"
 
 static std::string answer;
+static int ptr_count;
+
 
 static size_t write_answer(void *data, size_t size, size_t nmemb, char *userdata)
 {
     size_t str_length = nmemb * size;
-    try
+    memmove(userdata + ptr_count, data, str_length);
+    ptr_count += str_length;
+    /*try
     {
        answer.append((char*)data, str_length); 
     }
@@ -13,7 +18,7 @@ static size_t write_answer(void *data, size_t size, size_t nmemb, char *userdata
     {
         web_logger()->error("can't alloc memory [{}]", e.what());
         return 0;        
-    }    
+    }*/    
     return str_length;
 }
 
@@ -30,15 +35,6 @@ Request::~Request()
 
 uint8_t Request::init_my_curl()
 {
-    uint8_t temp = init_my_curl();
-    if(temp)
-    {
-        web_logger()->error("init_my_curl: eror");
-        return 1;
-    }        
-    else
-       web_logger()->info("init_my_curl: ok");
-
     curl_global_init(CURL_GLOBAL_ALL);
     my_curl = curl_easy_init();
 
@@ -53,16 +49,18 @@ void Request::set_options()
     curl_easy_setopt(my_curl, CURLOPT_HEADER, 1);
     list = curl_slist_append(list, my_header.c_str());
     curl_easy_setopt(my_curl, CURLOPT_HTTPHEADER, list);    
-    curl_easy_setopt(my_curl, CURLOPT_WRITEFUNCTION, write_answer);
+    //curl_easy_setopt(my_curl, CURLOPT_WRITEFUNCTION, write_answer);
     web_logger()->info("set_options: ok");   
 }
 
 void Request::take_answer()
 {   
     /*todo later reserve can throw exception*/
-    my_response.reserve(static_cast<ssize_t>(CURL_MAX_WRITE_SIZE));       
-    curl_easy_setopt(my_curl, CURLOPT_WRITEFUNCTION, &Request::read_from_api);
-    curl_easy_setopt(my_curl, CURLOPT_WRITEDATA, (void *)my_response.data());      
+    my_response.resize(116000);
+    //my_data = std::make_unique<char>(CURL_MAX_WRITE_SIZE);
+    ptr_count = 0;           
+    curl_easy_setopt(my_curl, CURLOPT_WRITEFUNCTION, write_answer);
+    curl_easy_setopt(my_curl, CURLOPT_WRITEDATA, (void*)my_response.data());      
     response = curl_easy_perform(my_curl);
     if(response != CURLE_OK)
     {
@@ -71,8 +69,9 @@ void Request::take_answer()
     else
     {
         web_logger()->info("take_answer - ok");        
-    }
-    my_response.shrink_to_fit();           
+    }    
+    web_logger()->info("readed {} byte from API", ptr_count);
+    my_response.resize(ptr_count);                   
 }
 
 void Request::print_answer()
@@ -107,10 +106,15 @@ void Request::add_standart_option(const vacansy_parameters &parameter, const std
 {
     switch (parameter)
     {
-        case vacansy_parameters::specialization :
+        case (vacansy_parameters::specialization) :
+        {
             std::string to_request {"text="};
             to_request.append(option);
             add_options_in_request(to_request);
+            break;
+        }
+            
+        default :
             break;
     }
 }
@@ -123,8 +127,18 @@ void Request::set_url()
 void Request::print_transaction_info()
 {    
     char *info;
-    CURLcode res = curl_easy_getinfo(my_curl, CURLINFO_EFFECTIVE_URL, &info);
+    curl_easy_getinfo(my_curl, CURLINFO_EFFECTIVE_URL, &info);
     web_logger()->info("last url [{}]", info);
+}
+
+std::string &Request::get_response()
+{
+    return my_response;
+}
+
+nlohmann::json & Request::get_json()
+{
+    return my_json;
 }
 
 std::string ProfessionRequest::get_from_api(const vacansy_parameters &parameter, const std::string &request)
@@ -132,6 +146,7 @@ std::string ProfessionRequest::get_from_api(const vacansy_parameters &parameter,
     set_options();
     add_standart_option(parameter, request);    
     take_answer();
+    print_answer();
     return answer;    
 }
 
@@ -139,20 +154,113 @@ std::string ProfessionRequest::get_from_api(const vacansy_parameters &parameter,
 size_t Request::read_from_api(void *ptr, size_t size, size_t nmemb, void* userdata)
 {
     ssize_t realsize = size * nmemb;
-    memmove(userdata, ptr, realsize);
-    return realsize;
+    web_logger()->info("{}", realsize); 
+    try
+    {
+       my_response.append((char*)ptr, realsize); 
+    }
+    catch(const std::bad_alloc& e)
+    {
+        web_logger()->error("can't alloc memory [{}]", e.what());
+        return 0;        
+    } 
+    return size * nmemb;
 }
 
 ProfessionRequest::ProfessionRequest(specializations_t specialization)
 {
-    auto ret = init_my_curl();
-    my_spec = std::move(specialization);          
+    auto ret = init_my_curl();    
+    if (ret)
+    {
+        web_logger()->error("filed to init_my_curl");
+    }
+    my_spec = std::move(specialization);
+    set_options();  
+    set_specialization();
+    set_url();            
 }
 
 void ProfessionRequest::execute_request()
 {
-    
+    take_answer();
+    std:: cout << get_response() << std::endl;    
 }
 
+/*  add specialization in request
+*   specialization set in object
+*/
 
+void ProfessionRequest::set_specialization()
+{
+    /*to do later 
+        change switch on std::map for more faster search
+    */
+    switch (my_spec) 
+    {
+        case specializations_t::cpp :
+        {
+            add_standart_option(vacansy_parameters::specialization, "с%2B%2B");
+            web_logger()->info("set cpp in request");
+            break;
+        }
+        default :
+        {
+            web_logger()->error("wrong specialization in request");
+        }
 
+    }
+}
+
+void RequestHandler::add_request(request_t &req)
+{
+    if(req != nullptr)
+    {
+        my_req_queue.push(std::move(req));
+        web_logger()->info("added request in queue");
+    }
+    else
+    {
+        web_logger()->error("request - nullptr");
+    }    
+}
+
+request_t &RequestHandler::get_request()
+{
+    if(my_req_queue.empty())
+    {
+        my_request = nullptr;
+        return my_request;
+    }        
+    else
+    {
+        my_request = std::move(my_req_queue.front());
+        my_req_queue.pop();
+        return my_request;
+    }
+}
+
+int RequestHandler::get_num_pages_in_request(request_t &req)
+{
+    std::string response = req->get_response();
+
+    /*find num pages in request*/
+    auto pos = response.find("pages");
+    if(pos == std::string::npos)
+    {
+        web_logger()->debug("request not consider num pages");
+        return -1;
+    }
+    else
+    {
+        pos += 7;
+        std::string sub_string{};
+        while(response.at(pos) != ',')
+        {
+            sub_string.push_back(response.at(pos));
+            pos++;
+        }
+        int num_pages = stoul(sub_string);
+         web_logger()->debug("num_pages  in request {}", num_pages);
+        return num_pages;
+    }    
+}

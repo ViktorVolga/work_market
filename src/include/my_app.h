@@ -5,8 +5,6 @@
 #include <memory>
 #include <queue>
 
-
-
 class App
 {    
 public:
