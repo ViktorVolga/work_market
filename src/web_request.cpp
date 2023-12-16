@@ -211,6 +211,11 @@ void ProfessionRequest::set_specialization()
     }
 }
 
+request_type_t ProfessionRequest::get_request_type()
+{
+    return my_req_type;
+}
+
 void RequestHandler::add_request(request_t &req)
 {
     if(req != nullptr)
@@ -236,6 +241,18 @@ request_t &RequestHandler::get_request()
         my_request = std::move(my_req_queue.front());
         my_req_queue.pop();
         return my_request;
+    }
+}
+
+void RequestHandler::run()
+{
+    request_t request = std::make_unique<ProfessionRequest>(specializations_t::cpp);        
+    add_request(request);
+    while(!my_req_queue.empty())
+    {
+        my_request = std::move(my_req_queue.front());
+        my_request->execute_request();
+        my_request_parser = 
     }
 }
 

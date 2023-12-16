@@ -9,19 +9,7 @@
 
 #include "logger.h"
 #include "request_parser.h"
-
-enum class vacansy_parameters{
-    specialization,
-    per_page,
-    text,
-    area,
-};
-
-typedef enum class Specializations{
-    cpp,
-    python,
-} specializations_t;
-
+#include "request_enums.h"
 
 class Request{
     CURL *my_curl;
@@ -49,7 +37,8 @@ public:
     virtual void execute_request() = 0;
     virtual std::string get_from_api(const vacansy_parameters &parameter, const std::string &request) = 0;
     std::string &get_response();
-    nlohmann::json & get_json();             
+    nlohmann::json & get_json();
+    virtual request_type_t get_request_type() =0;             
 };
 
 typedef std::unique_ptr<Request> request_t;
@@ -57,11 +46,13 @@ typedef std::unique_ptr<Request> request_t;
 class ProfessionRequest : public Request
 {
     specializations_t my_spec;
+    const request_type_t my_req_type{request_type_t::HHProfRequest};
 public:
     ProfessionRequest(specializations_t specialization);
     std::string get_from_api(const vacansy_parameters &parameter, const std::string &request);
     void execute_request() override;
     void set_specialization();
+    request_type_t get_request_type();
 };
 
 typedef std::unique_ptr<RequestParser> req_parser_ptr_t;
