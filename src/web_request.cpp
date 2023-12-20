@@ -252,7 +252,7 @@ void RequestHandler::run()
     {
         my_request = std::move(my_req_queue.front());
         my_request->execute_request();
-        my_request_parser = 
+        
     }
 }
 

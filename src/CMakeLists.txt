@@ -35,3 +35,5 @@ target_link_libraries(web_request request_parser)
 
 target_link_libraries(request_parser nlohmann_json::nlohmann_json)
 target_link_libraries(request_parser spdlog::spdlog)
+
+target_include_directories(request_parser PUBLIC include)

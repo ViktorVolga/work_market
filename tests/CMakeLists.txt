@@ -8,3 +8,14 @@ target_link_libraries(test-web_request
   web_request)
 
 add_test(web_request_tests test-web_request)
+
+add_executable(test-request_parser test-request_parser.cpp)
+
+target_link_libraries(test-request_parser
+  PRIVATE
+  GTest::GTest
+  request_parser)
+
+target_link_libraries(test-request_parser PRIVATE web_request)
+
+add_test(request_parser_tests test-request_parser)
