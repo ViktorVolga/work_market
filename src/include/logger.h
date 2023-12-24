@@ -30,16 +30,5 @@ static const std::shared_ptr<spdlog::logger>& web_logger()
         web_logger_ptr = std::make_shared<spdlog::logger>(logger);           
        
         return web_logger_ptr; 
-    }
-           
+    }           
 }
-
-
-
-
-
-
-
-
-//auto web_logger_ptr = spdlog::basic_logger_mt<spdlog::async_factory>("async_file_logger", "/home/logs/web.log");
-

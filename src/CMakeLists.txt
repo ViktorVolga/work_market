@@ -37,3 +37,14 @@ target_link_libraries(request_parser nlohmann_json::nlohmann_json)
 target_link_libraries(request_parser spdlog::spdlog)
 
 target_include_directories(request_parser PUBLIC include)
+
+set(Boost_USE_STATIC_LIBS OFF) 
+set(Boost_USE_MULTITHREADED ON)  
+set(Boost_USE_STATIC_RUNTIME OFF) 
+find_package(Boost 1.82 COMPONENTS program_options) 
+
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS}) 
+    add_library(intro intro.cpp) 
+    target_link_libraries(intro ${Boost_LIBRARIES})
+endif()
