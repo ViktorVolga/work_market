@@ -8,7 +8,6 @@
 #include <nlohmann/json.hpp>
 
 #include "logger.h"
-#include "request_parser.h"
 #include "request_enums.h"
 
 class Request{
@@ -54,20 +53,3 @@ public:
     void set_specialization();
     request_type_t get_request_type();
 };
-
-typedef std::unique_ptr<RequestParser> req_parser_ptr_t;
-
-class RequestHandler
-{
-    request_t my_request;
-    std::queue<request_t> my_req_queue;
-    req_parser_ptr_t my_request_parser;
-public:    
-    void add_request(request_t &req);
-    request_t &get_request();
-    void run();
-    int get_num_pages_in_request(request_t & req);    
-};
-
- 
-

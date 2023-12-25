@@ -2,26 +2,25 @@
 
 #include <memory>
 #include "request_enums.h"
+#include "web_request.h"
 
 class RequestHandler;
-
-class Request;
-
-typedef std::unique_ptr<Request> request_ptr_t;
 
 class RequestParser
 {
     RequestHandler * my_handler;
 public:
     RequestParser(RequestHandler * rh);
-    virtual void parse(request_ptr_t & req) = 0;
+    virtual void parse(request_t & req) = 0;
 };
 
 class HHRequestParser : public RequestParser
 {
+    bool first_page {false};
 public:
     HHRequestParser(RequestHandler * rh) : RequestParser(rh){};
-    void parse(request_ptr_t & req) override;
+    void parse(request_t & req) override;
+    bool is_first_page(request_t & req);
 };
 
 typedef std::unique_ptr<RequestParser> request_parser_t;

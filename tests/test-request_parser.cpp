@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
+#include <request_handler.h>
 #include <request_parser.h>
-#include <web_request.h>
 
 TEST(RequestFabricaSut, shuldReturnHHProfRequestParser)
 {
@@ -16,6 +16,11 @@ TEST(RequestFabricaSut, shuldReturnHHProfRequestParser)
     
     /*Assert*/
     EXPECT_NE(dynamic_cast<HHRequestParser*>(rp_ptr), nullptr);
+}
+
+TEST(isRequestFirstPageSut, shuldbeTruer)
+{
+   
 }
 
 int main(int argc, char** argv)

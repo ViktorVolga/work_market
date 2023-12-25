@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <web_request.h>
+#include <request_handler.h>
 
 TEST(web_reques_sut, get_num_pages_test)
 {

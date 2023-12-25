@@ -21,7 +21,6 @@ ProgramOptions::ProgramOptions(int argc, char * argv[])
     {
         std::cout << *my_description.get() << std::endl;
     }
-
 }
 
 int ProgramOptions::init()
