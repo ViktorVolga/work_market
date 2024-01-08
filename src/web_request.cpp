@@ -76,7 +76,7 @@ void Request::take_answer()
 
 void Request::print_answer()
 {
-    std::cout << response << std::endl;
+    std::cout << my_response << std::endl;
 }
 
 void Request::add_options_in_request(const std::string &options)
@@ -134,9 +134,9 @@ void Request::print_transaction_info()
 /*
     return answer  in std::string &
 */
-std::string &Request::get_response()
+std::string * Request::get_response()
 {
-    return my_response;
+    return &my_response;
 }
 
 nlohmann::json & Request::get_json()
@@ -185,8 +185,7 @@ ProfessionRequest::ProfessionRequest(specializations_t specialization)
 
 void ProfessionRequest::execute_request()
 {
-    take_answer();
-    std:: cout << get_response() << std::endl;    
+    take_answer();       
 }
 
 /*  add specialization in request

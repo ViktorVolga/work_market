@@ -12,7 +12,7 @@ void HHRequestParser::parse(request_t & req)
 
 bool HHRequestParser::is_first_page(request_t & req)
 {
-    std::string answer;
+    std::string * answer;
     if(req != nullptr)
         answer = req->get_response();
     else
@@ -20,12 +20,12 @@ bool HHRequestParser::is_first_page(request_t & req)
         web_logger()->error("[is_first_page] request_t is null_ptr");
         return false;
     }
-    auto pos = answer.find("\"page\":");
-    auto end_pos = answer.find(",\"per_page\":");
+    auto pos = answer->find("\"page\":");
+    auto end_pos = answer->find(",\"per_page\":");
     std::string sub_str;
     while(pos < end_pos)
     {
-        sub_str.push_back(answer[pos++]);
+        sub_str.push_back(answer->at(pos++));
     }
     int page = stoi(sub_str);
     if(page == 0)
@@ -47,3 +47,28 @@ request_parser_t RequestParserFabrica::get_request_parser(RequestHandler * rh, r
     return nullptr;
 }
 
+std::string * HHRequestParser::get_string_from_request(request_t & req)
+{
+    if(req != nullptr)
+        return req->get_response();    
+}
+
+void HHRequestParser::trim_answer(request_t & req)
+{
+    std::string * answer = get_string_from_request(req);
+    if(answer->empty())
+    {
+        web_logger()->error("HHRequestParser::trim_answer - answer is empty");
+        return;        
+    }    
+    auto start_json = std::next(answer->begin(), answer->find("{\"items\""));
+    answer->erase(answer->begin(), start_json);
+}
+
+void HHRequestParser::get_json(request_t & req)
+{
+    using namespace nlohmann::literals;
+    std::string * answer = get_string_from_request(req);
+    my_json = json::parse(*answer);
+    std::cout << my_json;
+}

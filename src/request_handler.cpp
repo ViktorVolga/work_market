@@ -42,10 +42,10 @@ void RequestHandler::run()
 
 int RequestHandler::get_num_pages_in_request(request_t &req)
 {
-    std::string response = req->get_response();
+    std::string * response = req->get_response();
 
     /*find num pages in request*/
-    auto pos = response.find("pages");
+    auto pos = response->find("pages");
     if(pos == std::string::npos)
     {
         web_logger()->debug("request not consider num pages");
@@ -55,9 +55,9 @@ int RequestHandler::get_num_pages_in_request(request_t &req)
     {
         pos += 7;
         std::string sub_string{};
-        while(response.at(pos) != ',')
+        while(response->at(pos) != ',')
         {
-            sub_string.push_back(response.at(pos));
+            sub_string.push_back(response->at(pos));
             pos++;
         }
         int num_pages = stoul(sub_string);

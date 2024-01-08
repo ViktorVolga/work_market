@@ -35,7 +35,7 @@ public:
     void print_transaction_info();
     virtual void execute_request() = 0;
     virtual std::string get_from_api(const vacansy_parameters &parameter, const std::string &request) = 0;
-    std::string &get_response();
+    std::string * get_response();
     nlohmann::json & get_json();
     virtual request_type_t get_request_type() =0;             
 };

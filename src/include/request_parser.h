@@ -1,8 +1,12 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include "request_enums.h"
 #include "web_request.h"
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 class RequestHandler;
 
@@ -17,10 +21,15 @@ public:
 class HHRequestParser : public RequestParser
 {
     bool first_page {false};
+    json my_json;  
 public:
     HHRequestParser(RequestHandler * rh) : RequestParser(rh){};
     void parse(request_t & req) override;
     bool is_first_page(request_t & req);
+    std::string * get_string_from_request(request_t & req);
+    void trim_answer(request_t & req);
+    void get_json(request_t & req);
+    
 };
 
 typedef std::unique_ptr<RequestParser> request_parser_t;
