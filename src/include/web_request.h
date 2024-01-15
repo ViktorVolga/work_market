@@ -31,13 +31,18 @@ public:
     void add_options_in_request(const std::string &options);
     void test_logger();
     void add_standart_option(const vacansy_parameters &parameter, const std::string &option);
-    void set_url(); 
+    void set_url();
+    void set_url(std::string * url); 
+    std::string * get_url();
     void print_transaction_info();
     virtual void execute_request() = 0;
     virtual std::string get_from_api(const vacansy_parameters &parameter, const std::string &request) = 0;
     std::string * get_response();
     nlohmann::json & get_json();
-    virtual request_type_t get_request_type() =0;             
+    virtual request_type_t get_request_type() = 0;
+    uint8_t get_num_options();
+    void set_num_options(uint8_t count);
+    void clean_up_curl();             
 };
 
 typedef std::unique_ptr<Request> request_t;
@@ -52,4 +57,16 @@ public:
     void execute_request() override;
     void set_specialization();
     request_type_t get_request_type();
+};
+
+class HHProfRequestPage : public Request
+{
+    specializations_t my_spec;
+    const request_type_t my_req_type{request_type_t::HHProfRequestPage};
+public:
+    HHProfRequestPage(ProfessionRequest * prof_req, uint8_t page_num);
+    void execute_request() override;
+    ~HHProfRequestPage();
+    request_type_t get_request_type();
+    std::string get_from_api(const vacansy_parameters &parameter, const std::string &request);
 };

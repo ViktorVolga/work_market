@@ -12,11 +12,11 @@ int main(int argc, char * argv[])
     my_req->execute_request();  
     rh.get_num_pages_in_request(my_req);
     HHRequestParser req_parser = HHRequestParser(&rh); 
-    req_parser.trim_answer(my_req);
-    std::string * answer = req_parser.get_string_from_request(my_req);
-    std::cout << *answer << std::endl;
-    std::cout << std::endl << std::endl;
-    req_parser.get_json(my_req);
+    req_parser.parse(my_req);
+
+    ProfessionRequest pr(specializations_t::cpp);
+    HHProfRequestPage next_request(&pr, 1);
+    next_request.execute_request();
 
     return 0;
 }

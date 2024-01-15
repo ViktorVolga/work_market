@@ -5,6 +5,7 @@ enum class vacansy_parameters{
     per_page,
     text,
     area,
+    page,
 };
 
 typedef enum class Specializations{
@@ -14,4 +15,5 @@ typedef enum class Specializations{
 
 typedef enum class RequestType{
     HHProfRequest,
+    HHProfRequestPage,
 } request_type_t;

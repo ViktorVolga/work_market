@@ -5,9 +5,11 @@ RequestParser::RequestParser(RequestHandler * rh)
     my_handler = rh;
 }
 
-void HHRequestParser::parse(request_t & req)
-{
-
+void HHRequestParser::parse(request_t & req){
+    
+    bool first_page = is_first_page(req);
+    trim_answer(req);
+    get_json(req);
 }
 
 bool HHRequestParser::is_first_page(request_t & req)
@@ -23,10 +25,11 @@ bool HHRequestParser::is_first_page(request_t & req)
     auto pos = answer->find("\"page\":");
     auto end_pos = answer->find(",\"per_page\":");
     std::string sub_str;
+    pos += 7;
     while(pos < end_pos)
     {
         sub_str.push_back(answer->at(pos++));
-    }
+    }   
     int page = stoi(sub_str);
     if(page == 0)
         return true;
