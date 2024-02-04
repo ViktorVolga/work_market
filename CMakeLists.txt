@@ -17,7 +17,7 @@ add_executable(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/src/web_request.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/src/sql.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/src/my_app.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/my_app.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/src/json.cpp
 )
 

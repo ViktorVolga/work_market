@@ -16,4 +16,5 @@ typedef enum class Specializations{
 typedef enum class RequestType{
     HHProfRequest,
     HHProfRequestPage,
+    HHVacansyRequest,
 } request_type_t;

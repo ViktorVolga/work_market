@@ -32,7 +32,8 @@ public:
     void test_logger();
     void add_standart_option(const vacansy_parameters &parameter, const std::string &option);
     void set_url();
-    void set_url(std::string * url); 
+    void set_url(std::string * url);
+    void set_url(std::string && url); 
     std::string * get_url();
     void print_transaction_info();
     virtual void execute_request() = 0;
@@ -64,9 +65,19 @@ class HHProfRequestPage : public Request
     specializations_t my_spec;
     const request_type_t my_req_type{request_type_t::HHProfRequestPage};
 public:
-    HHProfRequestPage(ProfessionRequest * prof_req, uint8_t page_num);
+    HHProfRequestPage(request_t & request, int page_num);
     void execute_request() override;
     ~HHProfRequestPage();
     request_type_t get_request_type();
     std::string get_from_api(const vacansy_parameters &parameter, const std::string &request);
+};
+
+class HHVacansyRequest : public Request
+{
+    const request_type_t my_req_type{request_type_t::HHVacansyRequest};
+public:
+    HHVacansyRequest(std::string * address);
+    void execute_request() override;
+    request_type_t get_request_type() override;
+    std::string get_from_api(const vacansy_parameters &parameter, const std::string &request) override;
 };

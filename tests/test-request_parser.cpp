@@ -5,13 +5,13 @@
 TEST(RequestFabricaSut, shuldReturnHHProfRequestParser)
 {
     /*Arrange*/
-    RequestHandler rh;
+    std::shared_ptr<RequestHandler> rh = std::make_shared<RequestHandler>();
     request_t request = std::make_unique<ProfessionRequest>(specializations_t::cpp);  
     RequestParserFabrica fabrica;
     std::unique_ptr<RequestParser> parser_ptr;
 
     /*Action*/
-    parser_ptr = fabrica.get_request_parser(&rh, request_type_t::HHProfRequest);
+    parser_ptr = fabrica.get_request_parser(rh.get(), request_type_t::HHProfRequest);
     RequestParser * rp_ptr = parser_ptr.get();
     
     /*Assert*/

@@ -94,7 +94,6 @@ void Request::add_options_in_request(const std::string &options)
         my_url.append(options);
         m_count_options++;
     }    
-    std::cout << my_url << std:: endl;
 }
 
 void Request::test_logger()
@@ -133,12 +132,17 @@ void Request::set_url()
 }
 
 void Request::set_url(std::string *url)
-{
+{    
     my_url = *url;
 }
 
-std::string * Request::get_url()
+void Request::set_url(std::string &&url)
 {
+    my_url = url;
+}
+
+std::string * Request::get_url()
+{    
     return &my_url;
 }
 
@@ -251,11 +255,11 @@ request_type_t ProfessionRequest::get_request_type()
     return my_req_type;
 }
 
-HHProfRequestPage::HHProfRequestPage(ProfessionRequest *prof_req, uint8_t page_num)
+HHProfRequestPage::HHProfRequestPage(request_t & request, int page_num)
 {
     /*copy url and num options from first request*/
-    set_url(prof_req->get_url());
-    set_num_options(prof_req->get_num_options());
+    set_url(request->get_url());
+    set_num_options(request->get_num_options());
 
     /*init curl*/
     auto ret = init_my_curl();    
@@ -266,6 +270,7 @@ HHProfRequestPage::HHProfRequestPage(ProfessionRequest *prof_req, uint8_t page_n
     set_options();
 
     /*add page in request url*/
+    /*fixme change here on boost*/
     std::string str_page_num = std::to_string(static_cast<int>(page_num));
     vacansy_parameters parametr = vacansy_parameters::page;
     add_standart_option(parametr, str_page_num);
@@ -293,4 +298,36 @@ request_type_t HHProfRequestPage::get_request_type()
 std::string HHProfRequestPage::get_from_api(const vacansy_parameters &parameter, const std::string &request)
 {
     return std::string("hi");
+}
+
+HHVacansyRequest::HHVacansyRequest(std::string * address)
+{
+    set_url(address);
+
+    /*init curl*/
+    auto ret = init_my_curl();    
+    if (ret)
+    {
+        web_logger()->error("filed to init_my_curl");
+    }
+    set_options();
+
+    /*set url to curl*/
+    set_url();
+}
+
+void HHVacansyRequest::execute_request()
+{
+    take_answer();
+    print_answer();
+}
+
+request_type_t HHVacansyRequest::get_request_type()
+{
+    return my_req_type;
+}
+
+std::string HHVacansyRequest::get_from_api(const vacansy_parameters &parameter, const std::string &request)
+{
+    return ("fix me later");
 }

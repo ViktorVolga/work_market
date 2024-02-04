@@ -1,4 +1,10 @@
 #include "include/request_handler.h"
+#include "request_handler.h"
+
+RequestHandler::RequestHandler()
+{
+    my_rpf = std::make_unique<RequestParserFabrica>();
+}
 
 void RequestHandler::add_request(request_t &req)
 {
@@ -32,11 +38,13 @@ void RequestHandler::run()
 {
     request_t request = std::make_unique<ProfessionRequest>(specializations_t::cpp);        
     add_request(request);
-    while(!my_req_queue.empty())
+    int count = 1;
+    while(count--)
     {
         my_request = std::move(my_req_queue.front());
         my_request->execute_request();
-        
+        my_request_parser = my_rpf->get_request_parser(this, my_request->get_request_type());
+        my_request_parser->parse(my_request);
     }
 }
 
@@ -64,4 +72,9 @@ int RequestHandler::get_num_pages_in_request(request_t &req)
          web_logger()->debug("num_pages  in request {}", num_pages);
         return num_pages;
     }    
+}
+
+void RequestHandler::print_mum_requests_in_queue()
+{
+    web_logger()->info("num request in queue {}", my_req_queue.size());    
 }
