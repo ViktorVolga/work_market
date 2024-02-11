@@ -2,7 +2,8 @@
 
 App::App()
 {
-    my_request_handler = std::make_shared<RequestHandler>();
+    my_vacansy_handler = std::make_shared<VacansyHandler>();
+    my_request_handler = std::make_shared<RequestHandler>(my_vacansy_handler);    
 }
 
 void App::first_request()

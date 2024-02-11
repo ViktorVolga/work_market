@@ -17,11 +17,10 @@ void HHRequestParser::parse(request_t & req){
         int num_pages = get_my_request_handler()->get_num_pages_in_request(req);
         fill_requests_list(num_pages, req);
     }
-
     for (auto & item : my_json["items"])
     {
         std::string vacansy_url = item["alternate_url"].template get<std::string>();
-        web_logger()->info(vacansy_url);
+        request_t vacansy_request = std::make_unique<HHVacansyRequest>(&vacansy_url);
     }    
 }
 

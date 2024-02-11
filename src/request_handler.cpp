@@ -1,9 +1,10 @@
 #include "include/request_handler.h"
 #include "request_handler.h"
 
-RequestHandler::RequestHandler()
+RequestHandler::RequestHandler(VacansyHandlerPtr_t vh)
 {
     my_rpf = std::make_unique<RequestParserFabrica>();
+    my_vacansy_handler_ptr = vh;
 }
 
 void RequestHandler::add_request(request_t &req)
@@ -77,4 +78,18 @@ int RequestHandler::get_num_pages_in_request(request_t &req)
 void RequestHandler::print_mum_requests_in_queue()
 {
     web_logger()->info("num request in queue {}", my_req_queue.size());    
+}
+
+void  RequestHandler::add_vacansy(vacansy_ptr_t vacansy)
+{
+    if(my_vacansy_handler_ptr)
+        my_vacansy_handler_ptr->add_vacansy_to_queue(std::move(vacansy));
+    else  
+        web_logger()->error("[RequestHandler::add_vacansy] my_vacansy_handler_ptr - nullptr");
+}
+
+void RequestHandler::add_vacansy_request(request_t request)
+{
+    my_vacansy_req_queue.push(std::move(request));
+    web_logger()->info("vacansy request pushed in queue");
 }

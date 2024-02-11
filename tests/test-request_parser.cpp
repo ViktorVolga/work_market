@@ -1,11 +1,13 @@
 #include <gtest/gtest.h>
 #include <request_handler.h>
 #include <request_parser.h>
+#include <vacansy_handler.h>
 
 TEST(RequestFabricaSut, shuldReturnHHProfRequestParser)
 {
     /*Arrange*/
-    std::shared_ptr<RequestHandler> rh = std::make_shared<RequestHandler>();
+    std::shared_ptr<VacansyHandler> vh_ptr_t = std::make_shared<VacansyHandler>();
+    std::shared_ptr<RequestHandler> rh = std::make_shared<RequestHandler>(vh_ptr_t);
     request_t request = std::make_unique<ProfessionRequest>(specializations_t::cpp);  
     RequestParserFabrica fabrica;
     std::unique_ptr<RequestParser> parser_ptr;

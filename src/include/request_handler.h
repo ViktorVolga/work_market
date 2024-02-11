@@ -1,6 +1,11 @@
 #pragma once
 
 #include "request_parser.h"
+#include "vacansy_handler.h"
+
+//class VacansyHandler;
+
+//typedef std::shared_ptr<VacansyHandler> VacansyHandlerPtr_t;
 
 class RequestHandler
 {
@@ -10,11 +15,14 @@ class RequestHandler
     request_parser_t my_request_parser;
     /*Request Parser Fabrica*/
     std::unique_ptr<RequestParserFabrica> my_rpf;
+    VacansyHandlerPtr_t my_vacansy_handler_ptr;
 public:
-    RequestHandler();    
-    void add_request(request_t &req);
+    RequestHandler(VacansyHandlerPtr_t vh);    
+    void add_request(request_t &req);   
     request_t &get_request();
     void run();
     int get_num_pages_in_request(request_t & req);
-    void print_mum_requests_in_queue();    
+    void print_mum_requests_in_queue();
+    void add_vacansy(vacansy_ptr_t vacansy);
+    void add_vacansy_request(request_t request);    
 };
