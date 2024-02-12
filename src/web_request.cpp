@@ -76,7 +76,7 @@ void Request::take_answer()
 
 void Request::print_answer()
 {
-    std::cout << response << std::endl;
+    std::cout << my_response << std::endl;
 }
 
 void Request::add_options_in_request(const std::string &options)
@@ -94,7 +94,6 @@ void Request::add_options_in_request(const std::string &options)
         my_url.append(options);
         m_count_options++;
     }    
-    std::cout << my_url << std:: endl;
 }
 
 void Request::test_logger()
@@ -113,6 +112,14 @@ void Request::add_standart_option(const vacansy_parameters &parameter, const std
             add_options_in_request(to_request);
             break;
         }
+
+        case (vacansy_parameters::page) :
+        {
+            std::string to_request {"page="};
+            to_request.append(option);
+            add_options_in_request(to_request);
+            break;
+        }
             
         default :
             break;
@@ -122,7 +129,22 @@ void Request::add_standart_option(const vacansy_parameters &parameter, const std
 void Request::set_url()
 {
     curl_easy_setopt(my_curl, CURLOPT_URL, my_url.c_str()); 
-}  
+}
+
+void Request::set_url(std::string *url)
+{    
+    my_url = *url;
+}
+
+void Request::set_url(std::string &&url)
+{
+    my_url = url;
+}
+
+std::string * Request::get_url()
+{    
+    return &my_url;
+}
 
 void Request::print_transaction_info()
 {    
@@ -131,14 +153,32 @@ void Request::print_transaction_info()
     web_logger()->info("last url [{}]", info);
 }
 
-std::string &Request::get_response()
+/*
+    return answer  in std::string &
+*/
+std::string * Request::get_response()
 {
-    return my_response;
+    return &my_response;
 }
 
 nlohmann::json & Request::get_json()
 {
     return my_json;
+}
+
+uint8_t Request::get_num_options()
+{
+    return m_count_options;
+}
+
+void Request::set_num_options(uint8_t count)
+{
+    m_count_options = count;
+}
+
+void Request::clean_up_curl()
+{
+    
 }
 
 std::string ProfessionRequest::get_from_api(const vacansy_parameters &parameter, const std::string &request)
@@ -182,8 +222,7 @@ ProfessionRequest::ProfessionRequest(specializations_t specialization)
 
 void ProfessionRequest::execute_request()
 {
-    take_answer();
-    std:: cout << get_response() << std::endl;    
+    take_answer();       
 }
 
 /*  add specialization in request
@@ -211,56 +250,84 @@ void ProfessionRequest::set_specialization()
     }
 }
 
-void RequestHandler::add_request(request_t &req)
+request_type_t ProfessionRequest::get_request_type()
 {
-    if(req != nullptr)
-    {
-        my_req_queue.push(std::move(req));
-        web_logger()->info("added request in queue");
-    }
-    else
-    {
-        web_logger()->error("request - nullptr");
-    }    
+    return my_req_type;
 }
 
-request_t &RequestHandler::get_request()
+HHProfRequestPage::HHProfRequestPage(request_t & request, int page_num)
 {
-    if(my_req_queue.empty())
+    /*copy url and num options from first request*/
+    set_url(request->get_url());
+    set_num_options(request->get_num_options());
+
+    /*init curl*/
+    auto ret = init_my_curl();    
+    if (ret)
     {
-        my_request = nullptr;
-        return my_request;
-    }        
-    else
-    {
-        my_request = std::move(my_req_queue.front());
-        my_req_queue.pop();
-        return my_request;
+        web_logger()->error("filed to init_my_curl");
     }
+    set_options();
+
+    /*add page in request url*/
+    /*fixme change here on boost*/
+    std::string str_page_num = std::to_string(static_cast<int>(page_num));
+    vacansy_parameters parametr = vacansy_parameters::page;
+    add_standart_option(parametr, str_page_num);
+
+    /*set url to curl*/
+    set_url();
 }
 
-int RequestHandler::get_num_pages_in_request(request_t &req)
+void HHProfRequestPage::execute_request()
 {
-    std::string response = req->get_response();
+    take_answer();
+    print_answer();
+}
 
-    /*find num pages in request*/
-    auto pos = response.find("pages");
-    if(pos == std::string::npos)
+HHProfRequestPage::~HHProfRequestPage()
+{
+    clean_up_curl();
+}
+
+request_type_t HHProfRequestPage::get_request_type()
+{
+    return my_req_type;
+}
+
+std::string HHProfRequestPage::get_from_api(const vacansy_parameters &parameter, const std::string &request)
+{
+    return std::string("hi");
+}
+
+HHVacansyRequest::HHVacansyRequest(std::string * address)
+{
+    set_url(address);
+
+    /*init curl*/
+    auto ret = init_my_curl();    
+    if (ret)
     {
-        web_logger()->debug("request not consider num pages");
-        return -1;
+        web_logger()->error("filed to init_my_curl");
     }
-    else
-    {
-        pos += 7;
-        std::string sub_string{};
-        while(response.at(pos) != ',')
-        {
-            sub_string.push_back(response.at(pos));
-            pos++;
-        }
-        int num_pages = stoul(sub_string);
-         web_logger()->debug("num_pages  in request {}", num_pages);
-        return num_pages;
-    }    
+    set_options();
+
+    /*set url to curl*/
+    set_url();
+}
+
+void HHVacansyRequest::execute_request()
+{
+    take_answer();
+    print_answer();
+}
+
+request_type_t HHVacansyRequest::get_request_type()
+{
+    return my_req_type;
+}
+
+std::string HHVacansyRequest::get_from_api(const vacansy_parameters &parameter, const std::string &request)
+{
+    return ("fix me later");
 }

@@ -58,12 +58,3 @@ public:
     const std::string & get_my_descripton();    
 };
 
-typedef std::unique_ptr<Vacansy> vacansy_ptr_t; 
-
-class VacansyHandler
-{
-    vacansy_ptr_t my_vacancy;
-    std::queue<vacansy_ptr_t> my_vacansy_queue_t;
-public:
-
-};

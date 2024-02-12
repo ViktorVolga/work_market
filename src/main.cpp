@@ -1,14 +1,12 @@
-#include "include/web_request.h"
-#include "include/request_parser.h"
-int main()
+#include "my_app.h"
+#include "include/intro.hpp"
+
+int main(int argc, char * argv[])
 {   
-    RequestHandler rh;
-    request_t request = std::make_unique<ProfessionRequest>(specializations_t::cpp);        
-    rh.add_request(request);
-    request_t &my_req = rh.get_request();
-    my_req->execute_request();  
-    rh.get_num_pages_in_request(my_req);
-    HHRequestParser req_parser = HHRequestParser(&rh); 
+    ProgramOptions po(argc, argv);
+    po.init();
     
+    App my_app = App();
+    my_app.run();   
     return 0;
 }

@@ -1,9 +1,12 @@
 #include <gtest/gtest.h>
-#include <web_request.h>
+#include <request_handler.h>
+#include <vacansy_handler.h>
 
 TEST(web_reques_sut, get_num_pages_test)
 {
-    RequestHandler rh;
+    
+    std::shared_ptr<VacansyHandler> vh_ptr_t = std::make_shared<VacansyHandler>();
+    RequestHandler rh(vh_ptr_t);
     request_t request = std::make_unique<ProfessionRequest>(specializations_t::cpp);        
     rh.add_request(request);
     request_t &my_req = rh.get_request();

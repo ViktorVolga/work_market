@@ -4,11 +4,16 @@
 #include "json.h"
 #include <memory>
 #include <queue>
+#include "request_parser.h"
+#include "request_handler.h"
+#include "vacansy_handler.h"
 
 class App
 {    
+    RequestHandlerPtr_t my_request_handler;
+    VacansyHandlerPtr_t my_vacansy_handler;
 public:
-    App();    
-    void take_request();
-    void get_json();    
+    App();
+    void first_request();
+    void run();    
 };

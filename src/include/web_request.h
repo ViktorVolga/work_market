@@ -8,20 +8,7 @@
 #include <nlohmann/json.hpp>
 
 #include "logger.h"
-#include "request_parser.h"
-
-enum class vacansy_parameters{
-    specialization,
-    per_page,
-    text,
-    area,
-};
-
-typedef enum class Specializations{
-    cpp,
-    python,
-} specializations_t;
-
+#include "request_enums.h"
 
 class Request{
     CURL *my_curl;
@@ -44,12 +31,19 @@ public:
     void add_options_in_request(const std::string &options);
     void test_logger();
     void add_standart_option(const vacansy_parameters &parameter, const std::string &option);
-    void set_url(); 
+    void set_url();
+    void set_url(std::string * url);
+    void set_url(std::string && url); 
+    std::string * get_url();
     void print_transaction_info();
     virtual void execute_request() = 0;
     virtual std::string get_from_api(const vacansy_parameters &parameter, const std::string &request) = 0;
-    std::string &get_response();
-    nlohmann::json & get_json();             
+    std::string * get_response();
+    nlohmann::json & get_json();
+    virtual request_type_t get_request_type() = 0;
+    uint8_t get_num_options();
+    void set_num_options(uint8_t count);
+    void clean_up_curl();             
 };
 
 typedef std::unique_ptr<Request> request_t;
@@ -57,26 +51,33 @@ typedef std::unique_ptr<Request> request_t;
 class ProfessionRequest : public Request
 {
     specializations_t my_spec;
+    const request_type_t my_req_type{request_type_t::HHProfRequest};
 public:
     ProfessionRequest(specializations_t specialization);
     std::string get_from_api(const vacansy_parameters &parameter, const std::string &request);
     void execute_request() override;
     void set_specialization();
+    request_type_t get_request_type();
 };
 
-typedef std::unique_ptr<RequestParser> req_parser_ptr_t;
-
-class RequestHandler
+class HHProfRequestPage : public Request
 {
-    request_t my_request;
-    std::queue<request_t> my_req_queue;
-    req_parser_ptr_t my_request_parser;
-public:    
-    void add_request(request_t &req);
-    request_t &get_request();
-    void run();
-    int get_num_pages_in_request(request_t & req);    
+    specializations_t my_spec;
+    const request_type_t my_req_type{request_type_t::HHProfRequestPage};
+public:
+    HHProfRequestPage(request_t & request, int page_num);
+    void execute_request() override;
+    ~HHProfRequestPage();
+    request_type_t get_request_type();
+    std::string get_from_api(const vacansy_parameters &parameter, const std::string &request);
 };
 
- 
-
+class HHVacansyRequest : public Request
+{
+    const request_type_t my_req_type{request_type_t::HHVacansyRequest};
+public:
+    HHVacansyRequest(std::string * address);
+    void execute_request() override;
+    request_type_t get_request_type() override;
+    std::string get_from_api(const vacansy_parameters &parameter, const std::string &request) override;
+};
