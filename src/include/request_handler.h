@@ -24,5 +24,7 @@ public:
     int get_num_pages_in_request(request_t & req);
     void print_mum_requests_in_queue();
     void add_vacansy(vacansy_ptr_t vacansy);
-    void add_vacansy_request(request_t request);    
+    void add_vacansy_request(request_t request);
+    int handle_one_request();
+    void set_first_request();    
 };

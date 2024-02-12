@@ -93,3 +93,40 @@ void RequestHandler::add_vacansy_request(request_t request)
     my_vacansy_req_queue.push(std::move(request));
     web_logger()->info("vacansy request pushed in queue");
 }
+
+/*
+    take one request from queue - execute and parse it
+    return 1 - if parsed vacansy request
+    return 2 - if parsed proffesional request
+    return 0 - if all requests are parsed and nothing to do
+*/
+int RequestHandler::handle_one_request()
+{
+    if(!my_vacansy_req_queue.empty())
+    {
+        web_logger()->info("[handle_one_request] - take one vacansy request");
+        my_request = std::move(my_vacansy_req_queue.front());
+        my_vacansy_req_queue.pop();
+        my_request->execute_request();
+        my_request_parser = my_rpf->get_request_parser(this, my_request->get_request_type());
+        my_request_parser->parse(my_request);
+        return 1;
+    }
+    if(!my_req_queue.empty())
+    {
+        my_request = std::move(my_vacansy_req_queue.front());
+        my_vacansy_req_queue.pop();
+        my_request->execute_request();
+        my_request_parser = my_rpf->get_request_parser(this, my_request->get_request_type());
+        my_request_parser->parse(my_request);
+        return 2;
+    }
+    /*if we here - it meas what noyhing to do else*/
+    return 0;
+}
+
+void RequestHandler::set_first_request()
+{
+    request_t request = std::make_unique<ProfessionRequest>(specializations_t::cpp);        
+    add_request(request);
+}
