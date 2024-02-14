@@ -71,6 +71,7 @@ void Request::take_answer()
         web_logger()->info("take_answer - ok");        
     }    
     web_logger()->info("readed {} byte from API", ptr_count);
+    
     my_response.resize(ptr_count);                   
 }
 

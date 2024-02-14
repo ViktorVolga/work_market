@@ -19,8 +19,9 @@ void HHRequestParser::parse(request_t & req){
     }
     for (auto & item : my_json["items"])
     {
-        std::string vacansy_url = item["alternate_url"].template get<std::string>();
+        std::string vacansy_url = item["url"].template get<std::string>();
         request_t vacansy_request = std::make_unique<HHVacansyRequest>(&vacansy_url);
+        get_my_request_handler()->add_vacansy_request(std::move(vacansy_request));
     }    
 }
 
@@ -97,9 +98,18 @@ request_parser_t RequestParserFabrica::get_request_parser(RequestHandler * rh, r
     {
         case request_type_t::HHProfRequest :
             return std::make_unique<HHRequestParser>(rh);
-            
+
+        case request_type_t::HHVacansyRequest :
+            return std::make_unique<HHVacansyRequestParser>(rh);
+
         default:
+            
             return nullptr;
     }
     return nullptr;
+}
+
+void HHVacansyRequestParser::parse(request_t &req)
+{
+
 }

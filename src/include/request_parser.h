@@ -36,6 +36,13 @@ public:
     
 };
 
+class HHVacansyRequestParser : public RequestParser
+{
+public:
+    HHVacansyRequestParser(RequestHandler * rh) : RequestParser(rh){};
+    void parse(request_t & req) override;
+};
+
 typedef std::unique_ptr<RequestParser> request_parser_t;
 
 class RequestParserFabrica

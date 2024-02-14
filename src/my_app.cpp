@@ -14,6 +14,17 @@ void App::first_request()
 
 void App::run()
 {
+    using namespace std::chrono_literals;
     first_request();
-    my_request_handler->run();
+    int count = 2;
+    while(count){
+        if(my_vacansy_handler->is_empty()){
+            my_request_handler->handle_one_request();
+            std::this_thread::sleep_for(1s);
+            count--;
+        } else { 
+            count--;
+        }
+    }
+    
 }

@@ -11,8 +11,14 @@ void RequestHandler::add_request(request_t &req)
 {
     if(req != nullptr)
     {
-        my_req_queue.push(std::move(req));
-        web_logger()->info("added request in queue");
+        if(req->get_request_type() == request_type_t::HHVacansyRequest){
+            my_vacansy_req_queue.push(std::move(req));
+            web_logger()->info("added vacansy request in queue");
+        } else {
+            my_req_queue.push(std::move(req));
+            web_logger()->info("added request in queue");
+        }
+        
     }
     else
     {
@@ -114,8 +120,8 @@ int RequestHandler::handle_one_request()
     }
     if(!my_req_queue.empty())
     {
-        my_request = std::move(my_vacansy_req_queue.front());
-        my_vacansy_req_queue.pop();
+        my_request = std::move(my_req_queue.front());
+        my_req_queue.pop();
         my_request->execute_request();
         my_request_parser = my_rpf->get_request_parser(this, my_request->get_request_type());
         my_request_parser->parse(my_request);

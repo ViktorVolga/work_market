@@ -14,6 +14,7 @@ class VacansyHandler
 public:
     VacansyHandler();   
     void add_vacansy_to_queue(vacansy_ptr_t vacansy);
+    bool is_empty();
 };
 
 typedef std::shared_ptr<VacansyHandler> VacansyHandlerPtr_t;
