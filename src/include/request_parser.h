@@ -15,25 +15,25 @@ typedef std::shared_ptr<RequestHandler> RequestHandlerPtr_t;
 class RequestParser
 {
     RequestHandler *  my_handler;
+    json my_json;
 public:
     RequestParser(RequestHandler * rh);
     virtual void parse(request_t & req) = 0;
     RequestHandler * get_my_request_handler();
+    std::string * get_string_from_request(request_t & req);
+    void get_json(request_t & req);
+    json & get_my_json();
 };
 
 class HHRequestParser : public RequestParser
 {
-    bool first_page {false};
-    json my_json;  
+    bool first_page {false};      
 public:
     HHRequestParser(RequestHandler * rh) : RequestParser(rh){};
     void parse(request_t & req) override;
-    bool is_first_page(request_t & req);
-    std::string * get_string_from_request(request_t & req);
-    void trim_answer(request_t & req);
-    void get_json(request_t & req);
-    void fill_requests_list(int num_pages, request_t & req);
-    
+    bool is_first_page(request_t & req);    
+    void trim_answer(request_t & req);    
+    void fill_requests_list(int num_pages, request_t & req);    
 };
 
 class HHVacansyRequestParser : public RequestParser
@@ -41,6 +41,7 @@ class HHVacansyRequestParser : public RequestParser
 public:
     HHVacansyRequestParser(RequestHandler * rh) : RequestParser(rh){};
     void parse(request_t & req) override;
+    void trim_answer(request_t & req);
 };
 
 typedef std::unique_ptr<RequestParser> request_parser_t;

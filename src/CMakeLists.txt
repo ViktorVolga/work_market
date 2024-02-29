@@ -29,6 +29,7 @@ target_link_libraries(request_handler nlohmann_json::nlohmann_json)
 
 add_library(vacansy vacansy.cpp vacansy_handler.cpp)
 target_include_directories(vacansy PUBLIC include)
+target_link_libraries(vacansy nlohmann_json::nlohmann_json spdlog::spdlog)
 
 set(Boost_USE_STATIC_LIBS OFF) 
 set(Boost_USE_MULTITHREADED ON)  

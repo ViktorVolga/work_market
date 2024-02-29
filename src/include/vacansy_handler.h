@@ -5,10 +5,8 @@
 
 typedef std::unique_ptr<Vacansy> vacansy_ptr_t;
 
-
-
 class VacansyHandler
-{
+{    
     vacansy_ptr_t my_vacancy;
     std::queue<vacansy_ptr_t> my_vacansy_queue;
 public:

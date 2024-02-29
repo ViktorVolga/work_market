@@ -4,6 +4,9 @@
 #include <vector>
 #include <memory>
 #include <queue>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 enum class Expirience
 {
@@ -38,7 +41,7 @@ public:
     Vacansy();
     void set_my_id(int id);
     int get_my_id();
-    void set_my_name(std::string &name);
+    void set_my_name(std::string name);
     const std::string & get_my_name();
     void set_my_country(std::string &country);
     const std::string & get_my_country();
@@ -55,6 +58,13 @@ public:
     void set_my_expirience(Expirience & expirience);
     const Expirience get_my_expirience();
     void set_my_description(std::string & description);
-    const std::string & get_my_descripton();    
+    const std::string & get_my_descripton(); 
+    virtual void save() = 0;   
+};
+
+class HHVacansy : public Vacansy {
+public:
+HHVacansy(const json & vacansy_json);
+void save() override;
 };
 
