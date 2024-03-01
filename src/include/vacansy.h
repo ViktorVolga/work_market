@@ -23,6 +23,16 @@ enum class Level
     unknown,
 };
 
+class Salary
+{
+    int from;
+    int to;
+public:
+    Salary(const int & from, const int & to);
+};
+
+typedef std::unique_ptr<Salary> salary_t;
+
 class Vacansy
 {
     int my_id                                {};
@@ -32,7 +42,7 @@ class Vacansy
     bool is_open                             {};
     std::string my_url                       {};
     std::string my_company                   {};
-    int my_rub_salary                        {};
+    salary_t my_salary                       {};
     Expirience my_expirience                 {};
     std::string my_description               {};
     std::vector<std::string> my_skills       {};
@@ -45,7 +55,7 @@ public:
     const std::string & get_my_name();
     void set_my_country(std::string &country);
     const std::string & get_my_country();
-    void set_my_sity(std::string &sity);
+    void set_my_sity(std::string sity);
     const std::string & get_my_sity();
     void set_is_open(bool open);
     bool get_is_open();
@@ -53,9 +63,9 @@ public:
     const std::string & get_my_url();
     void set_my_company(std::string & company);
     const std::string & get_my_company();
-    void set_my_salary(int & salary);
+    void set_my_salary(int min_salary, int max_salary);
     const int & get_my_rub_salary();
-    void set_my_expirience(Expirience & expirience);
+    void set_my_expirience(std::string expirience);
     const Expirience get_my_expirience();
     void set_my_description(std::string & description);
     const std::string & get_my_descripton(); 
