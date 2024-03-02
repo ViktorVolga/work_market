@@ -64,6 +64,18 @@ void Vacansy::set_my_expirience(std::string expirience)
         my_expirience =  Expirience::no_expirince;
 }
 
+void Vacansy::set_my_description(std::string description)
+{
+   web_logger()->info("Vacansy::set_my_description = [{}]", description);
+   my_description = description;
+}
+
+void Vacansy::set_my_schedule(std::string shedule)
+{
+    web_logger()->info("Vacansy::set_my_schedule = [{}]", shedule);
+    my_shedule = shedule;
+}
+
 HHVacansy::HHVacansy(const json &vacansy_json)
 {   
     int min_salary, max_salary;  
@@ -84,6 +96,8 @@ HHVacansy::HHVacansy(const json &vacansy_json)
     }
     set_my_salary(min_salary, max_salary);
     set_my_expirience(vacansy_json["experience"]["id"].template get<std::string>());
+    set_my_schedule(vacansy_json["schedule"]["id"].template get<std::string>());
+    set_my_description(vacansy_json["description"].template get<std::string>());
 }
 
 void HHVacansy::save()

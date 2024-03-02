@@ -47,6 +47,7 @@ class Vacansy
     std::string my_description               {};
     std::vector<std::string> my_skills       {};
     Level my_level                          {3};
+    std::string my_shedule                   {};
 public:
     Vacansy();
     void set_my_id(int id);
@@ -67,8 +68,9 @@ public:
     const int & get_my_rub_salary();
     void set_my_expirience(std::string expirience);
     const Expirience get_my_expirience();
-    void set_my_description(std::string & description);
+    void set_my_description(std::string description);
     const std::string & get_my_descripton(); 
+    void set_my_schedule(std::string shedule);
     virtual void save() = 0;   
 };
 
