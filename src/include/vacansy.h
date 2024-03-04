@@ -75,8 +75,10 @@ public:
 };
 
 class HHVacansy : public Vacansy {
+    
 public:
-HHVacansy(const json & vacansy_json);
-void save() override;
+    HHVacansy(const json & vacansy_json);
+    void save() override;
+
 };
 

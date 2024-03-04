@@ -102,5 +102,5 @@ HHVacansy::HHVacansy(const json &vacansy_json)
 
 void HHVacansy::save()
 {
-
+    
 }
