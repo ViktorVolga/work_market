@@ -7,6 +7,7 @@ int main(int argc, char * argv[])
     po.init();
     
     App my_app = App();
-    my_app.run();   
+    my_app.run();
+     
     return 0;
 }

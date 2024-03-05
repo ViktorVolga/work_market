@@ -1,8 +1,10 @@
+#pragma once
+
 #include <string>
 #include <map>
 #include <set>
 
-class Skil{
+class Skill{
     std::map<std::string, int> my_skills{
         {"linux", 1},
         {"Linux", 1},
@@ -38,5 +40,11 @@ class Skil{
         "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода",
         "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода",
     };
+    std::set<std::string> my_unrecognized_strings{
+
+    };
+public:
+    Skill();
+    int is_skill(std::string skill_candidat);
 };
 

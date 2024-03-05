@@ -47,7 +47,8 @@ class Vacansy
     std::string my_description               {};
     std::vector<std::string> my_skills       {};
     Level my_level                          {3};
-    std::string my_shedule                   {};
+    std::string my_shedule                   {}; 
+    std::queue<std::string> my_candidats_to_skills {};   
 public:
     Vacansy();
     void set_my_id(int id);
@@ -71,6 +72,7 @@ public:
     void set_my_description(std::string description);
     const std::string & get_my_descripton(); 
     void set_my_schedule(std::string shedule);
+    void get_skils_from_json(const json & vacansy_json);
     virtual void save() = 0;   
 };
 
@@ -78,6 +80,7 @@ class HHVacansy : public Vacansy {
     
 public:
     HHVacansy(const json & vacansy_json);
+
     void save() override;
 
 };

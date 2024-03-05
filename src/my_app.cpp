@@ -16,7 +16,7 @@ void App::run()
 {
     using namespace std::chrono_literals;
     first_request();
-    int count = 2;
+    int count = 3;
     while(count){
         if(my_vacansy_handler->is_empty()){
             my_request_handler->handle_one_request();

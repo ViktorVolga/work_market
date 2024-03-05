@@ -98,6 +98,17 @@ HHVacansy::HHVacansy(const json &vacansy_json)
     set_my_expirience(vacansy_json["experience"]["id"].template get<std::string>());
     set_my_schedule(vacansy_json["schedule"]["id"].template get<std::string>());
     set_my_description(vacansy_json["description"].template get<std::string>());
+    get_skils_from_json(vacansy_json);
+}
+
+void Vacansy::get_skils_from_json(const json & vacansy_json)
+{
+    web_logger()->info("Vacansy::get_skils_from_json start");
+    for (auto & skill : vacansy_json["key_skills"])
+    {
+        web_logger()->info("Vacansy::get_skils_from_json candidate [{}]", skill["name"]);
+        my_candidats_to_skills.push(skill["name"]);
+    }
 }
 
 void HHVacansy::save()
