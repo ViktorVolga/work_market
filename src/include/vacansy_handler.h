@@ -1,6 +1,9 @@
 #pragma once
 
 #include "vacansy.h"
+#include "logger.h"
+#include "skill_parser.h"
+
 #include <queue>
 
 typedef std::unique_ptr<Vacansy> vacansy_ptr_t;
@@ -13,6 +16,7 @@ public:
     VacansyHandler();   
     void add_vacansy_to_queue(vacansy_ptr_t vacansy);
     bool is_empty();
+    void handle_one_vacansy();
 };
 
 typedef std::shared_ptr<VacansyHandler> VacansyHandlerPtr_t;

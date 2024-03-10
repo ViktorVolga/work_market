@@ -27,7 +27,7 @@ FetchContent_MakeAvailable(json)
 
 target_link_libraries(request_handler nlohmann_json::nlohmann_json)
 
-add_library(vacansy vacansy.cpp vacansy_handler.cpp skill.cpp)
+add_library(vacansy vacansy.cpp vacansy_handler.cpp skill_parser.cpp)
 target_include_directories(vacansy PUBLIC include)
 target_link_libraries(vacansy nlohmann_json::nlohmann_json spdlog::spdlog)
 
@@ -41,3 +41,13 @@ if(Boost_FOUND)
     add_library(intro intro.cpp) 
     target_link_libraries(intro ${Boost_LIBRARIES})
 endif()
+
+add_library(skill skill.cpp)
+target_include_directories(skill PUBLIC include)
+target_link_libraries(skill vacansy spdlog::spdlog)
+
+add_library(skill_parser skill_parser.cpp)
+target_include_directories(skill_parser PUBLIC include)
+target_link_libraries(skill_parser vacansy skill spdlog::spdlog)
+
+target_link_libraries(vacansy skill)

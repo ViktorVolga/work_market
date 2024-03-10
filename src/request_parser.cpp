@@ -122,6 +122,7 @@ void HHVacansyRequestParser::parse(request_t & req)
     get_json(req);
     json & my_json = get_my_json();
     std::unique_ptr<Vacansy> new_vacansy = std::make_unique<HHVacansy>(my_json);
+    get_my_request_handler()->add_vacansy(std::move(new_vacansy));
     web_logger()->info("HHVacansyRequestParser::parse - end");
 }
 

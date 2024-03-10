@@ -23,6 +23,7 @@ void App::run()
             std::this_thread::sleep_for(1s);
             count--;
         } else { 
+            my_vacansy_handler->handle_one_vacansy();
             count--;
         }
     }

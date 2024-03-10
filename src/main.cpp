@@ -8,6 +8,6 @@ int main(int argc, char * argv[])
     
     App my_app = App();
     my_app.run();
-     
+
     return 0;
 }

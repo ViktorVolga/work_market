@@ -70,6 +70,11 @@ void Vacansy::set_my_description(std::string description)
    my_description = description;
 }
 
+std::string &Vacansy::get_my_descripton()
+{
+    return my_description;
+}
+
 void Vacansy::set_my_schedule(std::string shedule)
 {
     web_logger()->info("Vacansy::set_my_schedule = [{}]", shedule);
@@ -111,7 +116,21 @@ void Vacansy::get_skils_from_json(const json & vacansy_json)
     }
 }
 
+void Vacansy::clear_one_description(std::string & to_delete)
+{
+    web_logger()->info("[Vacansy::clear_description] start");
+
+    auto it = my_description.find(to_delete);
+    while(it != -1)
+    {
+        my_description.erase(it, 3);
+        it = my_description.find(to_delete);
+    }
+    web_logger()->info("[Vacansy::clear_description] end");
+}
+
 void HHVacansy::save()
 {
     
 }
+

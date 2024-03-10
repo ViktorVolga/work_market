@@ -2,6 +2,7 @@
 
 #include "request_parser.h"
 #include "vacansy_handler.h"
+#include "logger.h"
 
 //class VacansyHandler;
 

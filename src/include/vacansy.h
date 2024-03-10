@@ -70,10 +70,11 @@ public:
     void set_my_expirience(std::string expirience);
     const Expirience get_my_expirience();
     void set_my_description(std::string description);
-    const std::string & get_my_descripton(); 
+    std::string & get_my_descripton(); 
     void set_my_schedule(std::string shedule);
     void get_skils_from_json(const json & vacansy_json);
-    virtual void save() = 0;   
+    virtual void save() = 0;
+    void clear_one_description(std::string & to_delete);
 };
 
 class HHVacansy : public Vacansy {
