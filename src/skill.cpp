@@ -57,27 +57,36 @@ void Skill::write_to_file()
     
     skill_logger()->info("[Skill::write_to_file] - start");
 
-    const fs::path skills_path{"skills"};
+    const fs::path dictionary_path_folder{"dictionary"};    
+    if(fs::exists(dictionary_path_folder)){
+        skill_logger()->info("[Skill::write_to_file] - dictionary folder already exists");
+    } else {
+        skill_logger()->info("[Skill::write_to_file] - creating dictionary folder");
+        fs::create_directory(dictionary_path_folder);
+    }
+
+
+    const fs::path skills_path{"dictionary/skills"};
     std::ofstream skill_out_stream(skills_path, std::ios::out | std::ios::trunc);    
     json j_skills(my_skills);
     skill_out_stream << std::setw(4) << j_skills;
 
-    const fs::path mw_skills_path{"mw_skills"};
+    const fs::path mw_skills_path{"dictionary/mw_skills"};
     std::ofstream mw_skill_out_stream(mw_skills_path, std::ios::out | std::ios::trunc);    
     json j_mw_skills(my_multy_word_skills);
     mw_skill_out_stream << std::setw(4) << j_mw_skills;
 
-    const fs::path ignor_words_path{"ignor_words"};
+    const fs::path ignor_words_path{"dictionary/ignor_words"};
     std::ofstream ignor_words_out_stream(ignor_words_path, std::ios::out | std::ios::trunc);    
     json j_ignor_words(my_ignoring_words);
     ignor_words_out_stream << std::setw(4) << j_ignor_words;
 
-    const fs::path unrecognized_path{"unrecognized"};
+    const fs::path unrecognized_path{"dictionary/unrecognized"};
     std::ofstream unrecognized_out_stream(unrecognized_path, std::ios::out | std::ios::trunc);    
     json j_unrecognized(my_unrecognized_strings);
     unrecognized_out_stream << std::setw(4) << j_unrecognized;
 
-    const fs::path garbage_path{"garbage"};
+    const fs::path garbage_path{"dictionary/garbage"};
     std::ofstream garbage_out_stream(garbage_path, std::ios::out | std::ios::trunc);    
     json j_garbage(my_html_garbage);
     garbage_out_stream << std::setw(4) << j_garbage;    
