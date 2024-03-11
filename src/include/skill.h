@@ -5,6 +5,12 @@
 #include <set>
 #include <memory>
 #include <vector>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 #include "logger.h"
 
@@ -71,6 +77,7 @@ public:
     std::set<std::string> & get_ignoring_words();
     std::set<std::string> & get_unrecognized_strings();
     std::vector<std::string> & get_garbage();
+    void write_to_file();
 };
 
 typedef std::shared_ptr<Skill> skill_ptr_t;

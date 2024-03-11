@@ -27,5 +27,6 @@ void App::run()
             count--;
         }
     }
-    
+    skill_ptr_t skill = get_skills();
+    skill->write_to_file();    
 }
