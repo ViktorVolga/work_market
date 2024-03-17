@@ -78,6 +78,12 @@ public:
     std::set<std::string> & get_unrecognized_strings();
     std::vector<std::string> & get_garbage();
     void write_to_file();
+    void read_skills_from_file();
+    void read_mw_skills_from_file();
+    void read_my_ignoring_words();
+    void read_my_unrecognized_strings();
+    void read_my_html_garbage();
+    void read_my_dictionaries();
 };
 
 typedef std::shared_ptr<Skill> skill_ptr_t;

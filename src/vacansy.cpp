@@ -8,6 +8,16 @@ Salary::Salary(const int & from, const int & to)
     this->to = to;
 }
 
+std::string Salary::get_from()
+{
+    return boost::lexical_cast<std::string>(from);
+}
+
+std::string Salary::get_to()
+{
+    return boost::lexical_cast<std::string>(to);
+}
+
 Vacansy::Vacansy()
 {
 
@@ -119,7 +129,7 @@ void Vacansy::get_skils_from_json(const json & vacansy_json)
 void Vacansy::clear_one_description(std::string & to_delete)
 {
     web_logger()->info("[Vacansy::clear_description] start");
-
+    
     auto it = my_description.find(to_delete);
     while(it != -1)
     {
@@ -127,6 +137,19 @@ void Vacansy::clear_one_description(std::string & to_delete)
         it = my_description.find(to_delete);
     }
     web_logger()->info("[Vacansy::clear_description] end");
+}
+
+std::ostream & operator<<(std::ostream &stream, const Vacansy &vacansy)
+{    
+    stream << "id: " << boost::lexical_cast<std::string>(vacansy.my_id) << std::endl;
+    stream << "name: " << vacansy.my_name << std::endl;
+    stream << "country: " << vacansy.my_country << std::endl;
+    stream << "sity: " << vacansy.my_sity << std::endl;
+    stream << "company: " << vacansy.my_company << std::endl;
+    stream << "salary: " <<  std::endl;
+    stream << " from: " <<  vacansy.my_salary->get_from() << std::endl;
+    stream << " to: " <<  vacansy.my_salary->get_to() << std::endl;
+    return stream;
 }
 
 void HHVacansy::save()

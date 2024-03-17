@@ -7,6 +7,7 @@
 #include "request_parser.h"
 #include "request_handler.h"
 #include "vacansy_handler.h"
+#include "vacansy_saver.h"
 #include <chrono>
 #include <thread>
 

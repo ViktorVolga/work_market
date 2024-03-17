@@ -15,8 +15,11 @@ void App::first_request()
 void App::run()
 {
     using namespace std::chrono_literals;
+    skill_ptr_t skill = get_skills();
+    skill->read_my_dictionaries();
+    std::unique_ptr<VacansySaver> vs = std::make_unique<SaveAsJson>("/home/volga/work_market");
     first_request();
-    int count = 3;
+    int count = 4;
     while(count){
         if(my_vacansy_handler->is_empty()){
             my_request_handler->handle_one_request();
@@ -26,7 +29,6 @@ void App::run()
             my_vacansy_handler->handle_one_vacansy();
             count--;
         }
-    }
-    skill_ptr_t skill = get_skills();
+    }    
     skill->write_to_file();    
 }

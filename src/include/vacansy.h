@@ -5,6 +5,8 @@
 #include <memory>
 #include <queue>
 #include <nlohmann/json.hpp>
+#include <iostream>
+#include <boost/lexical_cast.hpp>
 
 using json = nlohmann::json;
 
@@ -29,6 +31,8 @@ class Salary
     int to;
 public:
     Salary(const int & from, const int & to);
+    std::string get_from();
+    std::string get_to();
 };
 
 typedef std::unique_ptr<Salary> salary_t;
@@ -75,6 +79,7 @@ public:
     void get_skils_from_json(const json & vacansy_json);
     virtual void save() = 0;
     void clear_one_description(std::string & to_delete);
+    friend std::ostream& operator<< (std::ostream& stream, const Vacansy& vacansy);
 };
 
 class HHVacansy : public Vacansy {

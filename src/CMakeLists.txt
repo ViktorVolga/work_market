@@ -51,3 +51,7 @@ target_include_directories(skill_parser PUBLIC include)
 target_link_libraries(skill_parser vacansy skill spdlog::spdlog)
 
 target_link_libraries(vacansy skill)
+
+add_library(vacansy_saver vacansy_saver.cpp)
+target_include_directories(vacansy_saver PUBLIC include)
+target_link_libraries(vacansy_saver vacansy)

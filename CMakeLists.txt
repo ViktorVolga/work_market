@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(work_market VERSION 0.0.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDART 20)
+set(CMAKE_CXX_STANDART 23)
 set(CMAKE_SYSTEM_NAME Linux)
 #set(CMAKE_CXX_FLAGS -Wall)
 
@@ -21,7 +21,7 @@ add_executable(
 #    ${CMAKE_CURRENT_SOURCE_DIR}/src/json.cpp
 )
 
-target_link_libraries(work_market request_handler vacansy)
+target_link_libraries(work_market request_handler vacansy vacansy_saver)
 
 set(spdlog_DIR "/home/libs/spdlog/build/")
 find_package(spdlog REQUIRED)
