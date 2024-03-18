@@ -19,7 +19,7 @@ void App::run()
     skill->read_my_dictionaries();
     std::unique_ptr<VacansySaver> vs = std::make_unique<SaveAsJson>("/home/volga/work_market");
     first_request();
-    int count = 4;
+    int count = 10;
     while(count){
         if(my_vacansy_handler->is_empty()){
             my_request_handler->handle_one_request();
@@ -27,6 +27,7 @@ void App::run()
             count--;
         } else { 
             my_vacansy_handler->handle_one_vacansy();
+            std::this_thread::sleep_for(1s);
             count--;
         }
     }    

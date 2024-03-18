@@ -149,6 +149,44 @@ std::ostream & operator<<(std::ostream &stream, const Vacansy &vacansy)
     stream << "salary: " <<  std::endl;
     stream << " from: " <<  vacansy.my_salary->get_from() << std::endl;
     stream << " to: " <<  vacansy.my_salary->get_to() << std::endl;
+    stream << "expirience: ";
+    switch (vacansy.my_expirience){
+        case Expirience::no_expirince :
+            stream << "no expirience";
+            break;
+        case Expirience::one_three_year :
+            stream << "1 - 3 years";
+            break;
+        case Expirience::more_three_year :
+            stream << "> 3 years";
+            break;
+    }
+    stream << std::endl;
+    stream << "description: " << vacansy.my_description << std::endl;
+    stream << "skills[" << vacansy.my_skills.size() << "] :" << std::endl;
+    for (auto & s : vacansy.my_skills){
+        stream << s << std::endl;
+    } 
+    stream << "level: ";
+    switch (vacansy.my_level){
+        case Level::june :
+            stream << "june";
+            break;
+        case Level::midle :
+            stream << "midle";
+            break;
+        case Level::senior :
+            stream << "senior";
+            break;
+        case Level::unknown :
+            stream << "unknown";
+            break;
+        default :
+            stream << "unknown";
+            break;
+    }
+    stream << std::endl;
+    stream << "shedule: " << vacansy.my_shedule << std::endl;
     return stream;
 }
 
