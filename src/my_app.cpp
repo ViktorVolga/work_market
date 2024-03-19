@@ -17,7 +17,7 @@ void App::run()
     using namespace std::chrono_literals;
     skill_ptr_t skill = get_skills();
     skill->read_my_dictionaries();
-    std::unique_ptr<VacansySaver> vs = std::make_unique<SaveAsJson>("/home/volga/work_market");
+    std::shared_ptr<VacansySaver> vs = get_vacansy_saver_ptr();
     first_request();
     int count = 10;
     while(count){

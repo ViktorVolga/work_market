@@ -7,6 +7,9 @@
 
 #include "vacansy.h"
 #include "logger.h"
+#include "web_request.h"
+
+class Request;
 
 class VacansySaver{    
 public:    
@@ -19,4 +22,10 @@ class SaveAsJson : public VacansySaver{
 public:
     SaveAsJson(std::string path);
     void resolve_save(std::unique_ptr<Vacansy> & vacansy) override;
+    bool is_saved(Request * request);
 };
+
+
+static std::shared_ptr<VacansySaver> vacansy_saver_ptr_t;
+
+const std::shared_ptr<VacansySaver> get_vacansy_saver_ptr();

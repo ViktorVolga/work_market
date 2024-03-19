@@ -139,6 +139,11 @@ void Vacansy::clear_one_description(std::string & to_delete)
     web_logger()->info("[Vacansy::clear_description] end");
 }
 
+void Vacansy::add_my_skill(int skill)
+{
+    my_skills.push_back(skill);
+}
+
 std::ostream & operator<<(std::ostream &stream, const Vacansy &vacansy)
 {    
     stream << "id: " << boost::lexical_cast<std::string>(vacansy.my_id) << std::endl;

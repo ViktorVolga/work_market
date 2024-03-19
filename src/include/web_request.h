@@ -9,6 +9,7 @@
 
 #include "logger.h"
 #include "request_enums.h"
+#include "vacansy_saver.h"
 
 class Request{
     CURL *my_curl;
@@ -75,9 +76,12 @@ public:
 class HHVacansyRequest : public Request
 {
     const request_type_t my_req_type{request_type_t::HHVacansyRequest};
+    int my_id;
 public:
     HHVacansyRequest(std::string * address);
+    HHVacansyRequest(std::string * address, int id);
     void execute_request() override;
     request_type_t get_request_type() override;
     std::string get_from_api(const vacansy_parameters &parameter, const std::string &request) override;
+    const int & get_id();
 };

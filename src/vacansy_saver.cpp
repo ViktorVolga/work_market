@@ -41,3 +41,37 @@ void SaveAsJson::resolve_save(std::unique_ptr<Vacansy> &vacansy)
                 
     }
 }
+
+bool SaveAsJson::is_saved(Request *request)
+{
+    web_logger()->info("[SaveAsJson::is_saved] - start");
+    if(!request)
+        return false;
+
+    auto req_type = request->get_request_type();
+    switch (req_type){
+        case request_type_t::HHVacansyRequest :
+            HHVacansyRequest * vacansy_request = dynamic_cast<HHVacansyRequest*>(request);
+            if(vacansy_request){
+                auto id = vacansy_request->get_id();
+                auto founded_it = my_already_saved_ids.find(id);
+                if(founded_it == my_already_saved_ids.end())
+                    return false;                    
+                else
+                    return true;
+            } else {
+                return false;
+            }
+       
+    }
+    return false;
+}
+
+const std::shared_ptr<VacansySaver> get_vacansy_saver_ptr()
+{
+    if (vacansy_saver_ptr_t){
+        return vacansy_saver_ptr_t;
+    } else {
+        return std::make_shared<SaveAsJson>("/home/volga/work_market");
+    }    
+}

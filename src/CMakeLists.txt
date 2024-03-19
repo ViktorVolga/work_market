@@ -25,7 +25,7 @@ include(FetchContent)
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
 FetchContent_MakeAvailable(json)
 
-target_link_libraries(request_handler nlohmann_json::nlohmann_json)
+target_link_libraries(request_handler nlohmann_json::nlohmann_json vacansy_saver)
 
 add_library(vacansy vacansy.cpp vacansy_handler.cpp skill_parser.cpp)
 target_include_directories(vacansy PUBLIC include)

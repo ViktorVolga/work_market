@@ -21,6 +21,7 @@ class SimpleSkillParser : public SkillParser{
 public:
     SimpleSkillParser() : SkillParser(){};
     void erase_garbage(std::string & description);
+    void parse_multy_word_skills(Vacansy * vacansy);
     void parse(Vacansy * vacansy) override;
     ~SimpleSkillParser() override;
 };

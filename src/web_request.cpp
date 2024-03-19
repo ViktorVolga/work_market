@@ -317,8 +317,26 @@ HHVacansyRequest::HHVacansyRequest(std::string * address)
     set_url();
 }
 
-void HHVacansyRequest::execute_request()
+HHVacansyRequest::HHVacansyRequest(std::string *address, int id)
 {
+    set_url(address);
+
+    /*init curl*/
+    auto ret = init_my_curl();    
+    if (ret)
+    {
+        web_logger()->error("filed to init_my_curl");
+    }
+    set_options();
+
+    /*set url to curl*/
+    set_url();
+
+    my_id = id;
+}
+
+void HHVacansyRequest::execute_request()
+{    
     take_answer();
     print_answer();
 }
@@ -331,4 +349,9 @@ request_type_t HHVacansyRequest::get_request_type()
 std::string HHVacansyRequest::get_from_api(const vacansy_parameters &parameter, const std::string &request)
 {
     return ("fix me later");
+}
+
+const int &HHVacansyRequest::get_id()
+{
+    return my_id;
 }

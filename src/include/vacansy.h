@@ -35,6 +35,13 @@ public:
     std::string get_to();
 };
 
+/*class Skill{
+    std::string my_name;
+    int my_id;
+public:
+    Skill(std::string & name, int id) : my_name(name), my_id(id){}; 
+};*/
+
 typedef std::unique_ptr<Salary> salary_t;
 
 class Vacansy
@@ -49,7 +56,7 @@ class Vacansy
     salary_t my_salary                       {};
     Expirience my_expirience                 {};
     std::string my_description               {};
-    std::vector<std::string> my_skills       {};
+    std::vector<int> my_skills       {};
     Level my_level                          {3};
     std::string my_shedule                   {}; 
     std::queue<std::string> my_candidats_to_skills {};   
@@ -80,6 +87,7 @@ public:
     virtual void save() = 0;
     void clear_one_description(std::string & to_delete);
     friend std::ostream& operator<< (std::ostream& stream, const Vacansy& vacansy);
+    void add_my_skill(int skill);
 };
 
 class HHVacansy : public Vacansy {

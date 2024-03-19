@@ -6,6 +6,8 @@
 #include "web_request.h"
 #include <nlohmann/json.hpp>
 
+#include <boost/lexical_cast.hpp>
+
 using json = nlohmann::json;
 
 class RequestHandler;

@@ -26,8 +26,17 @@ void HHRequestParser::parse(request_t & req){
     for (auto & item : get_my_json()["items"])
     {
         std::string vacansy_url = item["url"].template get<std::string>();
-        request_t vacansy_request = std::make_unique<HHVacansyRequest>(&vacansy_url);
-        get_my_request_handler()->add_vacansy_request(std::move(vacansy_request));
+        int id = boost::lexical_cast<int>(item["id"].template get<std::string>());
+        std::shared_ptr<VacansySaver> vs = get_vacansy_saver_ptr();
+        SaveAsJson * vacansy_saver = dynamic_cast<SaveAsJson*>(vs.get());
+        bool is_saved = false;
+        request_t vacansy_request = std::make_unique<HHVacansyRequest>(&vacansy_url, id);
+        if(vacansy_saver){
+            is_saved = vacansy_saver->is_saved(vacansy_request.get());
+        }
+        if(!is_saved){
+            get_my_request_handler()->add_vacansy_request(std::move(vacansy_request));
+        }        
     }    
 }
 

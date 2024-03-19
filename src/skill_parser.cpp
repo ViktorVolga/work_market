@@ -21,10 +21,24 @@ void SimpleSkillParser::erase_garbage(std::string & description)
     skill_logger()->info("[SimpleSkillParser::erase_garbage] - result description: {}", description);
 }
 
+void SimpleSkillParser::parse_multy_word_skills(Vacansy *vacansy)
+{
+    skill_logger()->info("[SimpleSkillParser::parse_multy_word_skills] - start");
+    std::string & description = vacansy->get_my_descripton();
+    std::map<std::string, int> & mw_map  = get_skills()->get_multy_word_skills();
+    for (auto & mw_skill : mw_map){
+        auto it = description.find(mw_skill.first);
+        if(it != std::string::npos){            
+            vacansy->add_my_skill(mw_skill.second);
+        }
+    }
+}
+
 void SimpleSkillParser::parse(Vacansy *vacansy)
 {
     skill_logger()->info("[SimpleSkillParser::parse] - start");
     erase_garbage(vacansy->get_my_descripton());
+
 }
 
 SimpleSkillParser::~SimpleSkillParser()
