@@ -19,7 +19,7 @@ void App::run()
     skill->read_my_dictionaries();
     std::shared_ptr<VacansySaver> vs = get_vacansy_saver_ptr();
     first_request();
-    int count = 10;
+    int count = 3;
     while(count){
         if(my_vacansy_handler->is_empty()){
             my_request_handler->handle_one_request();
@@ -31,5 +31,5 @@ void App::run()
             count--;
         }
     }    
-    skill->write_to_file();    
+    skill->write_to_file();   
 }

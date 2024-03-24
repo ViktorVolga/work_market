@@ -42,8 +42,8 @@ static const std::shared_ptr<spdlog::logger>& skill_logger()
     else
     {       
         spdlog::sink_ptr console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        console_sink->set_level(spdlog::level::debug);
-
+        console_sink->set_level(spdlog::level::info);
+        
         spdlog::sink_ptr file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("~/logs/web.log", true);
         file_sink->set_level(spdlog::level::debug);
 

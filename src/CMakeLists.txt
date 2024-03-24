@@ -34,12 +34,15 @@ target_link_libraries(vacansy nlohmann_json::nlohmann_json spdlog::spdlog)
 set(Boost_USE_STATIC_LIBS OFF) 
 set(Boost_USE_MULTITHREADED ON)  
 set(Boost_USE_STATIC_RUNTIME OFF) 
-find_package(Boost 1.82 COMPONENTS program_options) 
+find_package(Boost 1.82 COMPONENTS program_options locale
+REQUIRED) 
 
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS}) 
     add_library(intro intro.cpp) 
     target_link_libraries(intro ${Boost_LIBRARIES})
+    add_definitions( -DBOOST_ALL_NO_LIB )
+    add_definitions( -DBOOST_ALL_DYN_LINK )
 endif()
 
 add_library(skill skill.cpp)
@@ -48,9 +51,10 @@ target_link_libraries(skill vacansy spdlog::spdlog)
 
 add_library(skill_parser skill_parser.cpp)
 target_include_directories(skill_parser PUBLIC include)
-target_link_libraries(skill_parser vacansy skill spdlog::spdlog)
+target_link_libraries(skill_parser vacansy skill spdlog::spdlog Boost::locale)
 
-target_link_libraries(vacansy skill)
+
+target_link_libraries(vacansy skill Boost::locale)
 
 add_library(vacansy_saver vacansy_saver.cpp)
 target_include_directories(vacansy_saver PUBLIC include)

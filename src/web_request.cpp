@@ -8,9 +8,9 @@ static int ptr_count;
 static size_t write_answer(void *data, size_t size, size_t nmemb, char *userdata)
 {
     size_t str_length = nmemb * size;
-    memmove(userdata + ptr_count, data, str_length);
-    ptr_count += str_length;
-    /*try
+    //memmove(userdata + ptr_count, data, str_length);
+    //ptr_count += str_length;
+    try
     {
        answer.append((char*)data, str_length); 
     }
@@ -18,7 +18,7 @@ static size_t write_answer(void *data, size_t size, size_t nmemb, char *userdata
     {
         web_logger()->error("can't alloc memory [{}]", e.what());
         return 0;        
-    }*/    
+    }    
     return str_length;
 }
 
@@ -56,11 +56,12 @@ void Request::set_options()
 void Request::take_answer()
 {   
     /*todo later reserve can throw exception*/
-    my_response.resize(116000);
+    answer.clear();
+    //my_response.resize(200000);
     //my_data = std::make_unique<char>(CURL_MAX_WRITE_SIZE);
-    ptr_count = 0;           
+    //ptr_count = 0;           
     curl_easy_setopt(my_curl, CURLOPT_WRITEFUNCTION, write_answer);
-    curl_easy_setopt(my_curl, CURLOPT_WRITEDATA, (void*)my_response.data());      
+    //curl_easy_setopt(my_curl, CURLOPT_WRITEDATA, (void*)answer.data());      
     response = curl_easy_perform(my_curl);
     if(response != CURLE_OK)
     {
@@ -72,7 +73,7 @@ void Request::take_answer()
     }    
     web_logger()->info("readed {} byte from API", ptr_count);
     
-    my_response.resize(ptr_count);                   
+    my_response = std::move(answer);                       
 }
 
 void Request::print_answer()

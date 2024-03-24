@@ -14,7 +14,23 @@ using json = nlohmann::json;
 
 #include "logger.h"
 
+class SkillRepresentation{
+public:
+    int my_id;
+    std::string my_name;
+    SkillRepresentation(int id, std::string name) : my_id(id), my_name(name){};
+    friend std::ostream& operator<< (std::ostream& stream, const SkillRepresentation& skill_representation);
+};
+
 class Skill{
+    std::map<int, std::string> etalon_skills{
+        {1, "linux"}, {2, "multythreading"}, {3, "C"}, {4, "algorithm"},
+        {5, "testing"}, {6, "english"}, {7, "hardware"}, {8, "networks"},
+        {9, "Python"}, {10, "Jira"}, {11, "SQL"}, {12, "git"}, {13, "rest"},
+        {14, "json"}, {15, "flask"}, {16, "fast_api"}, {17, ".net"}, {18, "oop"},
+        {19, "pega"}, {20, "java"}, {21, "C++"}, {22, "c#"}, {23, "bpm"}, {24, "design_patterns"},
+        {25, "computer_science_degree"}
+    };
     std::map<std::string, int> my_skills{
         {"linux", 1},
         {"Linux", 1},
@@ -37,7 +53,7 @@ class Skill{
         {"Flask", 15},
         {"fast API", 16},
         {".NET", 17},
-        {"Javascript", 18}
+        {"Javascript", 18}, 
     };
     std::map<std::string, int> my_multy_word_skills{
         {"стандартные алгоритмы и структуры данных", 4},
@@ -53,7 +69,7 @@ class Skill{
         "полная", "занятость", "полный", "день", "В", "комапнию разработчика", "систем", "хранения данных", "требуется", "junior", "программиист", 
         "С/С++", "Мы", "разрабатываем", "отечественные", "системы", "хранения", "данных", "Требования", "Законченное", "высшее", "техническое", "образование",
         "Обязательно", "Наличие", "pet", "проектов", "или", "участие", "в", "open", "source", "проектах", "вы", "должны", "любить", "программирование", 
-        "Уверенное", "использование", "ОС", "Знания", "по", "программированию", "под", "Linux", "на", "используем", "20", "23", "опыт", "написания", "кода",
+        "Уверенное", "использование", "ОС", "Знания", "по", "программированию", "под", "на", "используем", "20", "23", "опыт", "написания", "кода",
         "также", "пригодится", "Знание", "как", "работают", "многопоточные", "приложения", "понимание", "работы", "вызовов", "умение", "применять", "способность", 
         "быстро", "кода", "кода", "кода", "кода", "кода",
         "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода", "кода",
@@ -71,9 +87,12 @@ class Skill{
 
 public:
     Skill(){};
-    int is_skill(std::string skill_candidat);
+    //int is_skill(std::string skill_candidat);
+    /*return SkillRepresentation if string is skill
+    or null if string not skill*/
+    std::unique_ptr<SkillRepresentation> is_skill(std::string & skill_candidat);
     std::map<std::string, int> & get_skills();
-    std::map<std::string, int> & get_multy_word_skills();
+    std::map<std::string, int> & get_multy_word_skills(); 
     std::set<std::string> & get_ignoring_words();
     std::set<std::string> & get_unrecognized_strings();
     std::vector<std::string> & get_garbage();
@@ -84,6 +103,9 @@ public:
     void read_my_unrecognized_strings();
     void read_my_html_garbage();
     void read_my_dictionaries();
+    std::string get_etalon_name(int id);
+    bool is_ignor_word(std::string & word);
+    void add_unrecognized_string(std::string && unrec_word);
 };
 
 typedef std::shared_ptr<Skill> skill_ptr_t;

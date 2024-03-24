@@ -139,9 +139,13 @@ void Vacansy::clear_one_description(std::string & to_delete)
     web_logger()->info("[Vacansy::clear_description] end");
 }
 
-void Vacansy::add_my_skill(int skill)
+void Vacansy::add_my_skill(skill_represent_ptr_t && skill)
 {
-    my_skills.push_back(skill);
+    for (auto & s: my_skills){
+        if (s->my_id == skill->my_id)
+            return;
+    }
+    my_skills.push_back(std::move(skill));     //   push_back(skill);
 }
 
 std::ostream & operator<<(std::ostream &stream, const Vacansy &vacansy)
@@ -170,8 +174,8 @@ std::ostream & operator<<(std::ostream &stream, const Vacansy &vacansy)
     stream << "description: " << vacansy.my_description << std::endl;
     stream << "skills[" << vacansy.my_skills.size() << "] :" << std::endl;
     for (auto & s : vacansy.my_skills){
-        stream << s << std::endl;
-    } 
+        stream << *s.get();
+    }    
     stream << "level: ";
     switch (vacansy.my_level){
         case Level::june :
