@@ -19,14 +19,15 @@ void App::run()
     skill->read_my_dictionaries();
     std::shared_ptr<VacansySaver> vs = get_vacansy_saver_ptr();
     first_request();
-    int count = 3;
-    while(count){
+    int count = 1;
+    while(!my_request_handler->is_empty() || !my_vacansy_handler->is_empty() || !my_request_handler->is_vacansy_requests_empty()){
+    //while(count > 0){
         if(my_vacansy_handler->is_empty()){
-            my_request_handler->handle_one_request();
+            my_request_handler->handle_one_request();            
             std::this_thread::sleep_for(1s);
             count--;
         } else { 
-            my_vacansy_handler->handle_one_vacansy();
+            my_vacansy_handler->handle_one_vacansy();            
             std::this_thread::sleep_for(1s);
             count--;
         }

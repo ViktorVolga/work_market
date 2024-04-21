@@ -13,3 +13,9 @@ target_link_libraries(test-request_parser PRIVATE GTest::GTest request_handler)
 target_link_libraries(test-request_parser PRIVATE request_handler vacansy) 
 
 add_test(request_parser_tests test-request_parser)
+
+add_executable(test-skill_statistic test-skill_statistic.cpp)
+
+target_link_libraries(test-skill_statistic PRIVATE GTest::GTest skill_statistic) 
+
+add_test(skill_statistic_tests test-skill_statistic)

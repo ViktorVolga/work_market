@@ -59,3 +59,7 @@ target_link_libraries(vacansy skill Boost::locale)
 add_library(vacansy_saver vacansy_saver.cpp)
 target_include_directories(vacansy_saver PUBLIC include)
 target_link_libraries(vacansy_saver vacansy)
+
+add_library(skill_statistic skill_statistic.cpp)
+target_include_directories(skill_statistic PUBLIC include)
+target_link_libraries(skill_statistic skill)

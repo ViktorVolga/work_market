@@ -7,7 +7,7 @@ SkillParser::SkillParser()
 
 void SimpleSkillParser::erase_garbage(std::string & description)
 {
-    skill_logger()->info("[SimpleSkillParser::erase_garbage] - start");
+    skill_logger()->debug("[SimpleSkillParser::erase_garbage] - start");
     skill_ptr_t skils = get_skills();
     for (auto & garbage : skils->get_garbage())
     {        
@@ -18,12 +18,12 @@ void SimpleSkillParser::erase_garbage(std::string & description)
             garbage_pos = description.find(garbage);
         }
     }
-    skill_logger()->info("[SimpleSkillParser::erase_garbage] - result description: {}", description);
+    skill_logger()->debug("[SimpleSkillParser::erase_garbage] - result description: {}", description);
 }
 
 void SimpleSkillParser::parse_multy_word_skills(Vacansy *vacansy)
 {    
-    skill_logger()->info("[SimpleSkillParser::parse_multy_word_skills] - start");
+    skill_logger()->debug("[SimpleSkillParser::parse_multy_word_skills] - start");
     std::string & description = vacansy->get_my_descripton();
     std::map<std::string, int> & mw_map  = get_skills()->get_multy_word_skills();
     for (auto & mw_skill : mw_map){
@@ -37,8 +37,26 @@ void SimpleSkillParser::parse_multy_word_skills(Vacansy *vacansy)
 void SimpleSkillParser::split_description(Vacansy *vacansy)
 {
     using namespace boost;
-    boost::split(my_words, vacansy->get_my_descripton(), boost::is_any_of(" "));
+    boost::split(my_words, vacansy->get_my_descripton(), boost::is_any_of(" //"));
+    std::vector<std::string> subs;
     for(auto & s : my_words){
+        /*boost::split(subs, s, boost::is_any_of("/"));
+        if(!subs.empty()){
+            for(auto & w : subs){
+                trim_if(w, is_any_of("."));
+                trim_if(w, is_any_of(","));
+                trim_if(w, is_any_of("«"));
+                trim_if(w, is_any_of("»"));
+                trim_if(w, is_any_of(":"));
+                trim_if(w, is_any_of(")"));
+                trim_if(w, is_any_of("("));
+                trim_if(w, is_any_of(";"));
+                trim_if(w, is_any_of(")"));
+                trim_if(w, is_any_of("\""));
+                trim_if(w, is_any_of("“"));
+                my_words.push_back(std::move(w));
+            }
+        }*/
         trim_if(s, is_any_of("."));
         trim_if(s, is_any_of(","));
         trim_if(s, is_any_of("«"));
@@ -94,7 +112,7 @@ void SimpleSkillParser::find_skills(Vacansy * vacansy)
 
 void SimpleSkillParser::parse(Vacansy *vacansy)
 {
-    skill_logger()->info("[SimpleSkillParser::parse] - start");
+    skill_logger()->debug("[SimpleSkillParser::parse] - start");
     erase_garbage(vacansy->get_my_descripton());
     parse_multy_word_skills(vacansy);
     split_description(vacansy);

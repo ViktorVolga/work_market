@@ -50,7 +50,7 @@ void Request::set_options()
     list = curl_slist_append(list, my_header.c_str());
     curl_easy_setopt(my_curl, CURLOPT_HTTPHEADER, list);    
     //curl_easy_setopt(my_curl, CURLOPT_WRITEFUNCTION, write_answer);
-    web_logger()->info("set_options: ok");   
+    web_logger()->debug("set_options: ok");   
 }
 
 void Request::take_answer()
@@ -69,16 +69,16 @@ void Request::take_answer()
     }
     else
     {
-        web_logger()->info("take_answer - ok");        
+        web_logger()->debug("take_answer - ok");        
     }    
-    web_logger()->info("readed {} byte from API", ptr_count);
+    web_logger()->debug("readed {} byte from API", ptr_count);
     
     my_response = std::move(answer);                       
 }
 
 void Request::print_answer()
 {
-    std::cout << my_response << std::endl;
+    //std::cout << my_response << std::endl;
 }
 
 void Request::add_options_in_request(const std::string &options)
@@ -152,7 +152,7 @@ void Request::print_transaction_info()
 {    
     char *info;
     curl_easy_getinfo(my_curl, CURLINFO_EFFECTIVE_URL, &info);
-    web_logger()->info("last url [{}]", info);
+    web_logger()->debug("last url [{}]", info);
 }
 
 /*
@@ -188,7 +188,7 @@ std::string ProfessionRequest::get_from_api(const vacansy_parameters &parameter,
     set_options();
     add_standart_option(parameter, request);    
     take_answer();
-    print_answer();
+    //print_answer();
     return answer;    
 }
 
@@ -196,7 +196,7 @@ std::string ProfessionRequest::get_from_api(const vacansy_parameters &parameter,
 size_t Request::read_from_api(void *ptr, size_t size, size_t nmemb, void* userdata)
 {
     ssize_t realsize = size * nmemb;
-    web_logger()->info("{}", realsize); 
+    web_logger()->debug("{}", realsize); 
     try
     {
        my_response.append((char*)ptr, realsize); 
@@ -241,7 +241,7 @@ void ProfessionRequest::set_specialization()
         case specializations_t::cpp :
         {
             add_standart_option(vacansy_parameters::specialization, "с%2B%2B");
-            web_logger()->info("set cpp in request");
+            web_logger()->debug("set cpp in request");
             break;
         }
         default :
@@ -284,7 +284,7 @@ HHProfRequestPage::HHProfRequestPage(request_t & request, int page_num)
 void HHProfRequestPage::execute_request()
 {
     take_answer();
-    print_answer();
+    //print_answer();
 }
 
 HHProfRequestPage::~HHProfRequestPage()
@@ -339,7 +339,7 @@ HHVacansyRequest::HHVacansyRequest(std::string *address, int id)
 void HHVacansyRequest::execute_request()
 {    
     take_answer();
-    print_answer();
+    //print_answer();
 }
 
 request_type_t HHVacansyRequest::get_request_type()

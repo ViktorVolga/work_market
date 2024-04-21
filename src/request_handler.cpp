@@ -97,7 +97,8 @@ void  RequestHandler::add_vacansy(vacansy_ptr_t vacansy)
 void RequestHandler::add_vacansy_request(request_t request)
 {
     my_vacansy_req_queue.push(std::move(request));
-    web_logger()->info("vacansy request pushed in queue");
+    web_logger()->info("[RequestHandler::add_vacansy_request] number of vacansy in queue {}", 
+        my_vacansy_req_queue.size());
 }
 
 /*
@@ -110,12 +111,14 @@ int RequestHandler::handle_one_request()
 {
     if(!my_vacansy_req_queue.empty())
     {
-        web_logger()->info("[handle_one_request] - take one vacansy request");
+        web_logger()->debug("[handle_one_request] - take one vacansy request");
         my_request = std::move(my_vacansy_req_queue.front());
         my_vacansy_req_queue.pop();
         my_request->execute_request();
         my_request_parser = my_rpf->get_request_parser(this, my_request->get_request_type());
         my_request_parser->parse(my_request);
+        vacansy_handled++;
+        web_logger()->info("Handled vacansies {}", vacansy_handled);
         return 1;
     }
     if(!my_req_queue.empty())
@@ -124,7 +127,14 @@ int RequestHandler::handle_one_request()
         my_req_queue.pop();
         my_request->execute_request();
         my_request_parser = my_rpf->get_request_parser(this, my_request->get_request_type());
-        my_request_parser->parse(my_request);
+        if(!my_request_parser){
+            web_logger()->error("[handle_one_request] - request parser fabrica retturn error");
+        } else {
+            my_request_parser->parse(my_request);
+            requests_handled++;
+        }   
+            
+        web_logger()->info("Handled requests {}", requests_handled);
         return 2;
     }
     /*if we here - it meas what noyhing to do else*/
@@ -135,4 +145,20 @@ void RequestHandler::set_first_request()
 {
     request_t request = std::make_unique<ProfessionRequest>(specializations_t::cpp);        
     add_request(request);
+}
+
+bool RequestHandler::is_empty()
+{
+    return my_req_queue.empty();
+}
+
+bool RequestHandler::is_vacansy_requests_empty()
+{
+    return my_vacansy_req_queue.empty();
+}
+
+void RequestHandler::add_to_to_handled()
+{
+    vacansy_handled++;
+    web_logger()->info("vacansies downloaded or already on hard disc {}", vacansy_handled);
 }

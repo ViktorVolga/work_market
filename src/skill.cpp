@@ -48,13 +48,13 @@ void Skill::write_to_file()
 {
     namespace fs = std::filesystem;    
     
-    skill_logger()->info("[Skill::write_to_file] - start");
+    skill_logger()->debug("[Skill::write_to_file] - start");
 
     const fs::path dictionary_path_folder{"dictionary"};    
     if(fs::exists(dictionary_path_folder)){
-        skill_logger()->info("[Skill::write_to_file] - dictionary folder already exists");
+        skill_logger()->debug("[Skill::write_to_file] - dictionary folder already exists");
     } else {
-        skill_logger()->info("[Skill::write_to_file] - creating dictionary folder");
+        skill_logger()->debug("[Skill::write_to_file] - creating dictionary folder");
         fs::create_directory(dictionary_path_folder);
     }
 
@@ -96,7 +96,7 @@ void Skill::write_to_file()
     skill_logger()->debug("[Skill::write_to_file] - garbage parsed"); 
     garbage_out_stream << std::setw(4) << j_garbage;    
     
-    skill_logger()->info("[Skill::write_to_file] - end");
+    skill_logger()->debug("[Skill::write_to_file] - end");
 }
 
 void Skill::read_skills_from_file()
@@ -159,7 +159,7 @@ void Skill::read_my_ignoring_words()
 
 void Skill::read_my_unrecognized_strings()
 {
-    skill_logger()->info("[Skill::read_my_unrecognized_strings] - start");
+    skill_logger()->debug("[Skill::read_my_unrecognized_strings] - start");
     namespace fs = std::filesystem;  
 
     const fs::path skills_path{"dictionary/unrecognized"};
@@ -173,12 +173,12 @@ void Skill::read_my_unrecognized_strings()
     for (auto & item : j_unrecognized.items()){        
        my_unrecognized_strings.emplace(item.value());
     }
-    skill_logger()->info("[Skill::read_my_unrecognized_strings] - end");
+    skill_logger()->debug("[Skill::read_my_unrecognized_strings] - end");
 }
 
 void Skill::read_my_html_garbage()
 {
-    skill_logger()->info("[Skill::read_my_html_garbage] - start");
+    skill_logger()->debug("[Skill::read_my_html_garbage] - start");
     namespace fs = std::filesystem;  
 
     const fs::path skills_path{"dictionary/garbage"};
@@ -192,12 +192,12 @@ void Skill::read_my_html_garbage()
     for (auto & item : j_garbage.items()){        
         my_html_garbage.push_back(item.value());
     }
-    skill_logger()->info("[Skill::read_my_html_garbage] - end");
+    skill_logger()->debug("[Skill::read_my_html_garbage] - end");
 }
 
 void Skill::read_my_dictionaries()
 {
-    skill_logger()->info("[Skill::read_my_dictionaries] - start");
+    skill_logger()->debug("[Skill::read_my_dictionaries] - start");
     
     namespace fs = std::filesystem;
 
@@ -231,7 +231,7 @@ void Skill::read_my_dictionaries()
     } else {
         skill_logger()->error("[Skill::read_my_dictionaries] - dictionary folder isn't exists");
     }
-    skill_logger()->info("[Skill::read_my_dictionaries] - end");
+    skill_logger()->debug("[Skill::read_my_dictionaries] - end");
 }
 
 /*
@@ -270,13 +270,18 @@ void Skill::add_unrecognized_string(std::string &&unrec_word)
     skill_logger()->debug("[Skill::add_unrecognized_string] - end");    
 }
 
+int Skill::get_etalon_skills_count()
+{
+    return static_cast<int>(etalon_skills.size());
+}
+
 const skill_ptr_t get_skills()
 {
     if(singletone_skill) {
-        skill_logger()->info("[get_skills] singletone_skill already inicialized");
+        skill_logger()->debug("[get_skills] singletone_skill already inicialized");
         return singletone_skill;
     } else {
-        skill_logger()->info("[get_skills] inicializing new singletone_skill");
+        skill_logger()->debug("[get_skills] inicializing new singletone_skill");
         singletone_skill = std::make_shared<Skill>();
         return singletone_skill;
     }        
@@ -286,6 +291,6 @@ std::ostream &operator<<(std::ostream &stream, const SkillRepresentation &skill_
 {
     stream << "skill {" << std::endl; 
     stream << " id: " << skill_representation.my_id << "," << std::endl;
-    stream << " name: " << skill_representation.my_id << " }"<< std::endl;
+    stream << " name: " << skill_representation.my_name << " }"<< std::endl;
     return stream;   
 }

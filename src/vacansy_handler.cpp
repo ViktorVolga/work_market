@@ -42,6 +42,10 @@ void VacansyHandler::handle_one_vacansy()
         /*here we find skills in description of vacansy*/
         parser->parse(my_vacancy.get());
 
+        if (!vacansy_saver_ptr_t)
+        vacansy_saver_ptr_t =  get_vacansy_saver_ptr();
+        vacansy_saver_ptr_t->resolve_save(my_vacancy);
+
     }
     web_logger()->info("[VacansyHandler::handle_one_vacansy] - vacansy handled");
 }

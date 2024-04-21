@@ -3,6 +3,7 @@
 #include "vacansy.h"
 #include "logger.h"
 #include "skill_parser.h"
+#include "vacansy_saver.h"
 
 #include <queue>
 

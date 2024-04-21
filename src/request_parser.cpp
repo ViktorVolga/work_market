@@ -36,7 +36,11 @@ void HHRequestParser::parse(request_t & req){
         }
         if(!is_saved){
             get_my_request_handler()->add_vacansy_request(std::move(vacansy_request));
-        }        
+        } else {
+            
+        }
+        get_my_request_handler()->add_to_to_handled();
+
     }    
 }
 
@@ -89,7 +93,7 @@ void RequestParser::get_json(request_t & req)
     using namespace nlohmann::literals;
     std::string * answer = get_string_from_request(req);
     my_json = json::parse(*answer);
-    std::cout << my_json;
+    //std::cout << my_json;
 }
 
 void HHRequestParser::fill_requests_list(int num_pages, request_t &req)
@@ -113,31 +117,39 @@ request_parser_t RequestParserFabrica::get_request_parser(RequestHandler * rh, r
     {
         case request_type_t::HHProfRequest :
             return std::make_unique<HHRequestParser>(rh);
+            break;
 
         case request_type_t::HHVacansyRequest :
             return std::make_unique<HHVacansyRequestParser>(rh);
+            break;
+
+        case request_type_t::HHProfRequestPage :
+            return std::make_unique<HHRequestParser>(rh);
+            break;
 
         default:
-            
+            web_logger()->error("[RequestParserFabrica::get_request_parser] in default case");            
             return nullptr;
+            break;
     }
+    web_logger()->error("[RequestParserFabrica::get_request_parser] i don't go to switch");  
     return nullptr;
 }
 
 void HHVacansyRequestParser::parse(request_t & req)
 {
-    web_logger()->info("HHVacansyRequestParser::parse - start");
+    web_logger()->debug("HHVacansyRequestParser::parse - start");
     trim_answer(req);
     get_json(req);
     json & my_json = get_my_json();
     std::unique_ptr<Vacansy> new_vacansy = std::make_unique<HHVacansy>(my_json);
     get_my_request_handler()->add_vacansy(std::move(new_vacansy));
-    web_logger()->info("HHVacansyRequestParser::parse - end");
+    web_logger()->debug("HHVacansyRequestParser::parse - end");
 }
 
 void HHVacansyRequestParser::trim_answer(request_t & req)
 {
-    web_logger()->info("HHVacansyRequestParser::trim_answer - start");
+    web_logger()->debug("HHVacansyRequestParser::trim_answer - start");
     std::string * answer = get_string_from_request(req);
     if(answer->empty())
     {
@@ -146,5 +158,5 @@ void HHVacansyRequestParser::trim_answer(request_t & req)
     }    
     auto start_json = std::next(answer->begin(), answer->find("{\"id\""));
     answer->erase(answer->begin(), start_json);
-    web_logger()->info("HHVacansyRequestParser::trim_answer - end");
+    web_logger()->debug("HHVacansyRequestParser::trim_answer - end");
 }

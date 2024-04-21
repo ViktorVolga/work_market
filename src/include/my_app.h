@@ -10,6 +10,7 @@
 #include "vacansy_saver.h"
 #include <chrono>
 #include <thread>
+#include "logger.h"
 
 class App
 {    

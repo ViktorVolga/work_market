@@ -2,28 +2,28 @@
 
 SaveAsJson::SaveAsJson(std::string path)
 {
-    web_logger()->info("[SaveAsJson::SaveAsJson] - start");
+    web_logger()->debug("[SaveAsJson::SaveAsJson] - start");
 
     namespace fs = std::filesystem; 
 
     my_path = path;
     if (!fs::exists(my_path)) {
-        web_logger()->info("[SaveAsJson::SaveAsJson] - passe path [{}] is not exists - creating new folder", path);
+        web_logger()->debug("[SaveAsJson::SaveAsJson] - passe path [{}] is not exists - creating new folder", path);
         fs::create_directory(path);
     } else {
-        web_logger()->info("[SaveAsJson::SaveAsJson] - path [{}] already exists", path);
+        web_logger()->debug("[SaveAsJson::SaveAsJson] - path [{}] already exists", path);
     }
 
     if(fs::is_empty(my_path)){
-        web_logger()->info("[SaveAsJson::SaveAsJson] - path [{}] is empty", path);
+        web_logger()->debug("[SaveAsJson::SaveAsJson] - path [{}] is empty", path);
     } else {
-        web_logger()->info("[SaveAsJson::SaveAsJson] - creating list of already saved vacancies");
+        web_logger()->debug("[SaveAsJson::SaveAsJson] - creating list of already saved vacancies");
         for (auto const & dir_entry : fs::directory_iterator(my_path)){            
             int vacansy_id = boost::lexical_cast<int>(dir_entry.path().stem().string());
             my_already_saved_ids.insert(vacansy_id);
         }   
     }
-    web_logger()->info("[SaveAsJson::SaveAsJson] - end"); 
+    web_logger()->debug("[SaveAsJson::SaveAsJson] - end"); 
 }
 
 void SaveAsJson::resolve_save(std::unique_ptr<Vacansy> &vacansy)
@@ -36,15 +36,22 @@ void SaveAsJson::resolve_save(std::unique_ptr<Vacansy> &vacansy)
         std::string id = boost::lexical_cast<std::string>(vacansy_id);
         std::string path = my_path;
         path.push_back('/');
-        path.assign(id.begin(), id.end());
+        path += id;
         web_logger()->info("[SaveAsJson::resolve_save] full path [{}]", path);
-                
+
+        namespace fs = std::filesystem;  
+        const fs::path vacansy_path{path};
+        if(!fs::exists(path)){
+            std::ofstream vacansy_out_stream(path, std::ios::out | std::ios::trunc);
+            vacansy_out_stream << *vacansy.get(); 
+        }
+                     
     }
 }
 
 bool SaveAsJson::is_saved(Request *request)
 {
-    web_logger()->info("[SaveAsJson::is_saved] - start");
+    web_logger()->debug("[SaveAsJson::is_saved] - start");
     if(!request)
         return false;
 

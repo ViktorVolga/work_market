@@ -32,7 +32,7 @@ class Salary
     int from;
     int to;
 public:
-    Salary(const int & from, const int & to);
+    Salary(const int from, const int to);
     std::string get_from();
     std::string get_to();
 };
@@ -49,19 +49,19 @@ typedef std::unique_ptr<SkillRepresentation> skill_represent_ptr_t;
 
 class Vacansy
 {
-    int my_id                                {};
-    std::string my_name                      {};
-    std::string my_country                   {}; 
-    std::string my_sity                      {};
-    bool is_open                             {};
-    std::string my_url                       {};
-    std::string my_company                   {};
-    salary_t my_salary                       {};
-    Expirience my_expirience                 {};
-    std::string my_description               {};
-    std::vector<skill_represent_ptr_t> my_skills       {};
-    Level my_level                          {3};
-    std::string my_shedule                   {}; 
+    int my_id {};
+    std::string my_name {};
+    std::string my_country {}; 
+    std::string my_city {};
+    bool is_open {};
+    std::string my_url {};
+    std::string my_company {};
+    salary_t my_salary {};
+    Expirience my_expirience {};
+    std::string my_description {};
+    std::vector<skill_represent_ptr_t> my_skills {};
+    Level my_level {3};
+    std::string my_shedule {}; 
     std::queue<std::string> my_candidats_to_skills {};   
 public:
     Vacansy();
@@ -71,7 +71,7 @@ public:
     const std::string & get_my_name();
     void set_my_country(std::string &country);
     const std::string & get_my_country();
-    void set_my_sity(std::string sity);
+    void set_my_city(std::string city);
     const std::string & get_my_sity();
     void set_is_open(bool open);
     bool get_is_open();
@@ -90,7 +90,8 @@ public:
     virtual void save() = 0;
     void clear_one_description(std::string & to_delete);
     friend std::ostream& operator<< (std::ostream& stream, const Vacansy& vacansy);
-    void add_my_skill(skill_represent_ptr_t && skill);    
+    void add_my_skill(skill_represent_ptr_t && skill);
+    friend std::istream& operator>> (std::istream& stream, Vacansy& vacansy);    
 };
 
 class HHVacansy : public Vacansy {

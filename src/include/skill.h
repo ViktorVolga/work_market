@@ -29,7 +29,13 @@ class Skill{
         {9, "Python"}, {10, "Jira"}, {11, "SQL"}, {12, "git"}, {13, "rest"},
         {14, "json"}, {15, "flask"}, {16, "fast_api"}, {17, ".net"}, {18, "oop"},
         {19, "pega"}, {20, "java"}, {21, "C++"}, {22, "c#"}, {23, "bpm"}, {24, "design_patterns"},
-        {25, "computer_science_degree"}
+        {25, "computer_science_degree"}, {26, "client server applications"},
+        {27, "computer vision"}, {28, "digital signal processing"}, {29, "web applications"}, {30, "pytest"},
+        {31, "poetry"}, {32, "perl"}, {33, "make"}, {34, "cmake"}, {35, "bash"}, {36, "autotools"}, 
+        {37, "ast library"}, {38, "Verilog"}, {39, "spring framework"}, {40, "solid"}, {41, "alt linux"}, {42, "ci/cd"},
+        {43, "css"}, {44, "docker"}, {45, "go"}, {46, "html"}, {47, "hibernate framework"}, {48, "jdbc standart"},
+        {49, "jvm"}, {50, "mvc framework"}, {51, "mapstruct lib"}, {52, "maven framework"}, {53, "rpm"}, {54, "lisp"}, 
+        {55, "quemu"}, {56, "yocto"}, {57, "qt"}
     };
     std::map<std::string, int> my_skills{
         {"linux", 1},
@@ -106,6 +112,7 @@ public:
     std::string get_etalon_name(int id);
     bool is_ignor_word(std::string & word);
     void add_unrecognized_string(std::string && unrec_word);
+    int get_etalon_skills_count();
 };
 
 typedef std::shared_ptr<Skill> skill_ptr_t;

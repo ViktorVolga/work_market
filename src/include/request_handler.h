@@ -17,6 +17,9 @@ class RequestHandler
     /*Request Parser Fabrica*/
     std::unique_ptr<RequestParserFabrica> my_rpf;
     VacansyHandlerPtr_t my_vacansy_handler_ptr;
+    int requests_handled {0};
+    int vacansy_handled {0};
+    
 public:
     RequestHandler(VacansyHandlerPtr_t vh);    
     void add_request(request_t &req);   
@@ -27,5 +30,8 @@ public:
     void add_vacansy(vacansy_ptr_t vacansy);
     void add_vacansy_request(request_t request);
     int handle_one_request();
-    void set_first_request();    
+    void set_first_request();  
+    bool is_empty();
+    bool is_vacansy_requests_empty();
+    void add_to_to_handled();
 };
