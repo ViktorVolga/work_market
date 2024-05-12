@@ -91,15 +91,17 @@ public:
     void clear_one_description(std::string & to_delete);
     friend std::ostream& operator<< (std::ostream& stream, const Vacansy& vacansy);
     void add_my_skill(skill_represent_ptr_t && skill);
-    friend std::istream& operator>> (std::istream& stream, Vacansy& vacansy);    
+    friend std::istream& operator>> (std::istream& stream, Vacansy& vacansy); 
+    void set_my_level(Level level);
 };
 
 class HHVacansy : public Vacansy {
     
 public:
+    HHVacansy();
     HHVacansy(const json & vacansy_json);
-
+    HHVacansy(int id, std::string && name, std::string && country, std::string && city, std::string && company, int salary_from,
+        int salary_to, std::string && expirience, std::string && description, std::vector<skill_represent_ptr_t> & skills, 
+        Level level, std::string && schedule);
     void save() override;
-
 };
-

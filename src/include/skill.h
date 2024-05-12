@@ -35,7 +35,7 @@ class Skill{
         {37, "ast library"}, {38, "Verilog"}, {39, "spring framework"}, {40, "solid"}, {41, "alt linux"}, {42, "ci/cd"},
         {43, "css"}, {44, "docker"}, {45, "go"}, {46, "html"}, {47, "hibernate framework"}, {48, "jdbc standart"},
         {49, "jvm"}, {50, "mvc framework"}, {51, "mapstruct lib"}, {52, "maven framework"}, {53, "rpm"}, {54, "lisp"}, 
-        {55, "quemu"}, {56, "yocto"}, {57, "qt"}
+        {55, "quemu"}, {56, "yocto"}, {57, "qt"}, {58, "simulink"}, {59, "nginx"}, {60, "uml"}, {61, "math"}, {62, "physics"}
     };
     std::map<std::string, int> my_skills{
         {"linux", 1},
