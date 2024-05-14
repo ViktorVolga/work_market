@@ -18,6 +18,16 @@ std::string Salary::get_to()
     return boost::lexical_cast<std::string>(to);
 }
 
+int & Salary::get_int_from()
+{
+    return from;
+}
+
+int & Salary::get_int_to()
+{
+    return to;
+}
+
 Vacansy::Vacansy()
 {
 
@@ -61,15 +71,35 @@ void Vacansy::set_my_city(std::string city)
     my_city = city;
 }
 
+const std::string &Vacansy::get_my_city()
+{
+    return my_city;
+}
+
 void Vacansy::set_my_company(std::string &company)
 {
     my_company = company;
+}
+
+const std::string &Vacansy::get_my_company()
+{
+    return my_company;
 }
 
 void Vacansy::set_my_salary(int min_salary, int max_salary)
 {    
     web_logger()->debug("Vacansy::set_my_salary min = [{}], max = [{}]", min_salary, max_salary);   
     my_salary = std::make_unique<Salary>(min_salary, max_salary);
+}
+
+const int & Vacansy::get_my_rub_salary_from()
+{
+    return my_salary->get_int_from();
+}
+
+const int &Vacansy::get_my_rub_salary_to()
+{
+    return my_salary->get_int_to();
 }
 
 void Vacansy::set_my_expirience(std::string expirience)
@@ -79,13 +109,18 @@ void Vacansy::set_my_expirience(std::string expirience)
         my_expirience =  Expirience::no_expirince;
 }
 
+const Expirience Vacansy::get_my_expirience()
+{
+    return my_expirience;
+}
+
 void Vacansy::set_my_description(std::string description)
 {
    web_logger()->debug("Vacansy::set_my_description = [{}]", description);
    my_description = description;
 }
 
-std::string &Vacansy::get_my_descripton()
+std::string & Vacansy::get_my_descripton()
 {
     return my_description;
 }
@@ -93,7 +128,7 @@ std::string &Vacansy::get_my_descripton()
 void Vacansy::set_my_schedule(std::string shedule)
 {
     web_logger()->debug("Vacansy::set_my_schedule = [{}]", shedule);
-    my_shedule = shedule;
+    my_schedule = shedule;
 }
 
 HHVacansy::HHVacansy()
@@ -139,7 +174,7 @@ HHVacansy::HHVacansy(int id, std::string && name, std::string && country, std::s
     set_my_description(description);
     for (auto & s : skills){
         add_my_skill(std::move(s));
-    }
+    }    
     set_my_level(level);
     set_my_schedule(schedule);
 }
@@ -177,8 +212,25 @@ void Vacansy::add_my_skill(skill_represent_ptr_t && skill)
 }
 
 void Vacansy::set_my_level(Level level)
+{    
+    my_level = level;   
+}
+
+skill_represent_ptr_t Vacansy::get_my_skill()
 {
-    my_level = level;
+    skill_represent_ptr_t skill = std::move(my_skills.back());
+    my_skills.pop_back();
+    return std::move(skill);
+}
+
+Level Vacansy::get_my_level()
+{    
+    return my_level;
+}
+
+const std::string & Vacansy::get_my_schedule()
+{
+    return my_schedule;
 }
 
 std::ostream & operator<<(std::ostream &stream, const Vacansy &vacansy)
@@ -228,7 +280,7 @@ std::ostream & operator<<(std::ostream &stream, const Vacansy &vacansy)
             break;
     }
     stream << std::endl;
-    stream << "shedule: " << vacansy.my_shedule << std::endl;
+    stream << "shedule: " << vacansy.my_schedule << std::endl;
     return stream;
 }
 
@@ -237,7 +289,7 @@ std::istream &operator>>(std::istream &stream, Vacansy &vacansy)
     std::string raw_id;
     std::string id;
     std::getline(stream, raw_id);
-    std::cout << raw_id << std::endl;
+    
     if(raw_id[0] == 'i'){
         id = raw_id.substr(4, raw_id.size() - 4);        
         vacansy.my_id = boost::lexical_cast<int>(id);        
@@ -250,7 +302,7 @@ std::istream &operator>>(std::istream &stream, Vacansy &vacansy)
         vacansy.my_name = raw_name.substr(6, raw_name.size() - 6);
     }
 
-    /*std::string raw_country;
+    std::string raw_country;
     std::getline(stream, raw_country);
     if(raw_country[0] == 'c'){
         if(raw_country.size() > 9)
@@ -306,10 +358,10 @@ std::istream &operator>>(std::istream &stream, Vacansy &vacansy)
         raw_description.append(temp);
         std::getline(stream, temp);
     }
-    vacansy.my_description = raw_description.substr(13, raw_description.size() -13);*/
+    vacansy.my_description = raw_description.substr(13, raw_description.size() -13);
 
     /*skills parsing*/
-    /*std::string skills_count_s;
+    std::string skills_count_s;
     if(temp[8] == ']'){
         skills_count_s = temp.substr(7, 1);
     } else if (temp[9] == ']') {
@@ -327,26 +379,27 @@ std::istream &operator>>(std::istream &stream, Vacansy &vacansy)
             raw_id = temp.substr(5, 3);
         }
         int skill_id = boost::lexical_cast<int>(raw_id);
-        std::getline(stream, temp);
-        raw_name = temp.substr(7, temp.size() - 9);        
+        std::getline(stream, temp);        
+        raw_name = temp.substr(7, temp.size() - 7);              
         vacansy.add_my_skill(std::make_unique<SkillRepresentation>(skill_id, raw_name));
-    }*/
+        skill_count--;
+    }
 
     /*level*/
-    /*std::getline(stream, temp);
+    std::getline(stream, temp);
     if (temp == "level: unknown"){
-        vacansy.my_level == Level::unknown;
-    } else if (temp == "level: june"){
-        vacansy.my_level == Level::june;
+        vacansy.my_level = Level::unknown;
+    } else if (temp == "level: june"){        
+        vacansy.my_level = Level::june;        
     } else if (temp == "level: midle"){
-        vacansy.my_level == Level::midle;
+        vacansy.my_level = Level::midle;
     } else if (temp == "level: senior"){
-        vacansy.my_level == Level::senior;
-    }*/
+        vacansy.my_level = Level::senior;
+    }
 
     /*shedule*/
-    /*std::getline(stream, temp);    
-    vacansy.my_shedule = temp.substr(9, temp.size() - 9);*/
+    std::getline(stream, temp);    
+    vacansy.my_schedule = temp.substr(9, temp.size() - 9);
 
     return stream;
 }
