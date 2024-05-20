@@ -87,9 +87,11 @@ void RequestHandler::print_mum_requests_in_queue()
 }
 
 void  RequestHandler::add_vacansy(vacansy_ptr_t vacansy)
-{
-    if(my_vacansy_handler_ptr)
+{    
+    if(my_vacansy_handler_ptr){
         my_vacansy_handler_ptr->add_vacansy_to_queue(std::move(vacansy));
+        web_logger()->info("RequestHandler::add_vacansy vacansy added to queue");
+    }        
     else  
         web_logger()->error("[RequestHandler::add_vacansy] my_vacansy_handler_ptr - nullptr");
 }

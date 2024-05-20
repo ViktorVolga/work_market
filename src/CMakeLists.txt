@@ -5,6 +5,8 @@ target_include_directories(request_handler PUBLIC include)
 set(spdlog_DIR "/home/libs/spdlog/build/")
 find_package(spdlog REQUIRED)
 
+add_library(salary salary.cpp)
+target_include_directories(salary PUBLIC include)
 
 add_library(spdlog SHARED IMPORTED)
 target_link_libraries(request_handler spdlog::spdlog)
@@ -54,7 +56,7 @@ target_include_directories(skill_parser PUBLIC include)
 target_link_libraries(skill_parser vacansy skill spdlog::spdlog Boost::locale)
 
 
-target_link_libraries(vacansy skill Boost::locale)
+target_link_libraries(vacansy skill Boost::locale salary)
 
 add_library(vacansy_saver vacansy_saver.cpp)
 target_include_directories(vacansy_saver PUBLIC include)
@@ -62,4 +64,4 @@ target_link_libraries(vacansy_saver vacansy)
 
 add_library(skill_statistic skill_statistic.cpp)
 target_include_directories(skill_statistic PUBLIC include)
-target_link_libraries(skill_statistic skill)
+target_link_libraries(skill_statistic skill salary)

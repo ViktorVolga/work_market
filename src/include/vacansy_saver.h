@@ -23,6 +23,7 @@ public:
     SaveAsJson(std::string path);
     void resolve_save(std::unique_ptr<Vacansy> & vacansy) override;
     bool is_saved(Request * request);
+    std::unique_ptr<Vacansy> read_vacansy(int id);
 };
 
 

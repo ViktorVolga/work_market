@@ -30,7 +30,7 @@ void SaveAsJson::resolve_save(std::unique_ptr<Vacansy> &vacansy)
 {
     int vacansy_id = vacansy->get_my_id();
     if(my_already_saved_ids.count(vacansy_id)){
-        web_logger()->info("[SaveAsJson::resolve_save] salready has id [{}]", vacansy_id);
+        web_logger()->info("[SaveAsJson::resolve_save] already has id [{}]", vacansy_id);
     } else {
         web_logger()->info("[SaveAsJson::resolve_save] saving new vacansy. id [{}]", vacansy_id);
         std::string id = boost::lexical_cast<std::string>(vacansy_id);
@@ -72,6 +72,18 @@ bool SaveAsJson::is_saved(Request *request)
        
     }
     return false;
+}
+
+std::unique_ptr<Vacansy> SaveAsJson::read_vacansy(int id)
+{
+    std::unique_ptr<Vacansy> vacansy_from_file = std::make_unique<HHVacansy>();
+    std::string vacansy_path = my_path; 
+    vacansy_path.push_back('/');
+    vacansy_path += boost::lexical_cast<std::string>(id);
+    std::ifstream vacansy_in_stream(vacansy_path, std::ios::in);
+    vacansy_in_stream >> *vacansy_from_file.get();
+
+    return std::move(vacansy_from_file);
 }
 
 const std::shared_ptr<VacansySaver> get_vacansy_saver_ptr()

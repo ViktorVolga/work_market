@@ -36,8 +36,9 @@ void HHRequestParser::parse(request_t & req){
         }
         if(!is_saved){
             get_my_request_handler()->add_vacansy_request(std::move(vacansy_request));
-        } else {
-            
+        } else {            
+            get_my_request_handler()->add_vacansy(vacansy_saver->read_vacansy(id));
+            web_logger()->info("added vacansy from file");
         }
         get_my_request_handler()->add_to_to_handled();
 
