@@ -37,4 +37,97 @@ const skill_stat_ptr_t get_skill_stat_ptr()
     }
 }
 
+int SingleSkillStat::count_awerage_salary(std::list<salary_ptr_t>  & salary_list)
+{
+    int temp_sum = 0;    
+    int count = 0;
+    for(auto & s : salary_list){
+        if (s->get_int_from() != 0 && s->get_int_to() !=0) {
+            temp_sum += (s->get_int_from() + s->get_int_to()) / 2;
+            count++;
+        }
+    }
+    return (temp_sum / count);
+}
 
+int SingleSkillStat::count_awerage_salary_from(std::list<salary_ptr_t> &jun_salary_list)
+{
+    int temp_sum = 0;    
+    int count = 0;
+    for(auto & s : jun_salary_list){
+        if (s->get_int_from() != 0) {
+            temp_sum += s->get_int_from(); 
+            count++;
+        }
+    }
+    return (temp_sum / count);    
+}
+
+int SingleSkillStat::count_awerage_salary_to(std::list<salary_ptr_t> &jun_salary_list)
+{
+    int temp_sum = 0;
+    int count = 0;
+    for(auto & s : jun_salary_list){
+        if (s->get_int_to() != 0) {
+            temp_sum += s->get_int_to(); 
+            count++;
+        }
+    }
+    return (temp_sum / count); 
+    return 0;
+}
+
+void SingleSkillStat::add_to_stat(ApplicantLevel level, salary_ptr_t && salary, std::queue<int> & friend_skills)
+{
+    web_logger()->debug("SingleSkillStat::add_to_stat - started");
+    switch (level){
+        case ApplicantLevel::june :
+            my_jun_vacansies_count++;
+            my_jun_salary_list.push_back(std::move(salary));
+            while (!friend_skills.empty()){
+                if (my_friend_skills.size() > static_cast<ssize_t>(friend_skills.front()))
+                    my_friend_skills.at(friend_skills.front())++;
+                else
+                    web_logger()->error("SingleSkillStat::add_to_stat skill id [{}] is bigger then size of frien skill count [{}]", 
+                        static_cast<ssize_t>(friend_skills.front()), my_friend_skills.size());
+                friend_skills.pop();
+            }
+            break;
+        case ApplicantLevel::midle :
+            my_midl_vacancies_count++;
+            my_mid_salary_list.push_back(std::move(salary));
+            while (!friend_skills.empty()){
+                if (my_friend_skills.size() > static_cast<ssize_t>(friend_skills.front()))
+                    my_friend_skills.at(friend_skills.front())++;
+                else
+                    web_logger()->error("SingleSkillStat::add_to_stat skill id [{}] is bigger then size of frien skill count [{}]", 
+                        static_cast<ssize_t>(friend_skills.front()), my_friend_skills.size());
+                friend_skills.pop();
+            }
+            break;
+        case ApplicantLevel::senior :
+            my_senior_vacansies_count++;
+            my_senior_salary_list.push_back(std::move(salary));
+            while (!friend_skills.empty()){
+                if (my_friend_skills.size() > static_cast<ssize_t>(friend_skills.front()))
+                    my_friend_skills.at(friend_skills.front())++;
+                else
+                    web_logger()->error("SingleSkillStat::add_to_stat skill id [{}] is bigger then size of frien skill count [{}]", 
+                        static_cast<ssize_t>(friend_skills.front()), my_friend_skills.size());
+                friend_skills.pop();
+            }
+            break;
+        case ApplicantLevel::unknown :
+            my_undef_vacansies_count++;
+            my_common_salary_list.push_back(std::move(salary));
+            while (!friend_skills.empty()){
+                if (my_friend_skills.size() > static_cast<ssize_t>(friend_skills.front()))
+                    my_friend_skills.at(friend_skills.front())++;
+                else
+                    web_logger()->error("SingleSkillStat::add_to_stat skill id [{}] is bigger then size of frien skill count [{}]", 
+                        static_cast<ssize_t>(friend_skills.front()), my_friend_skills.size());
+                friend_skills.pop();
+            }
+            break;
+    }
+}

@@ -31,16 +31,55 @@ TEST(SkillStatistic_sut_sut, add_to_skill_count){
     EXPECT_EQ(1, stat_ptr->get_skill_stat_by_id(0));
 }
 
-TEST(SkillStatistic_sut_sut, add_to_skill_count1){
+TEST(SingleSkillStat_sut, SingleSkillStat_sut_count_awerage_Test){
     /*arrange*/
-    skill_stat_ptr_t stat_ptr = get_skill_stat_ptr();
+    std::string name = "linux";
+    SingleSkillStat skill_stat(1, name);    
+    std::list<salary_ptr_t> salary_list;
+    salary_list.push_back(std::make_unique<Salary>(100, 200));
+    salary_list.push_back(std::make_unique<Salary>(0, 200));
+    salary_list.push_back(std::make_unique<Salary>(200, 300));
 
     /*action*/
-    stat_ptr->add_to_skill(stat_ptr->get_skill_count() + 1);
+    int awerage_salary = skill_stat.count_awerage_salary(salary_list);
 
     /*assert*/
-    EXPECT_EQ(0, stat_ptr->get_skill_stat_by_id(stat_ptr->get_skill_count() + 1));
+    EXPECT_EQ(awerage_salary, 200);
 }
+
+TEST(SingleSkillStat_sut, SingleSkillStat_sut_count_awerage_from_Test){
+    /*arrange*/
+    std::string name = "linux";
+    SingleSkillStat skill_stat(1, name);    
+    std::list<salary_ptr_t> salary_list;
+    salary_list.push_back(std::make_unique<Salary>(100, 200));
+    salary_list.push_back(std::make_unique<Salary>(0, 200));
+    salary_list.push_back(std::make_unique<Salary>(200, 300));
+
+    /*action*/
+    int awerage_salary = skill_stat.count_awerage_salary_from(salary_list);
+
+    /*assert*/
+    EXPECT_EQ(awerage_salary, 150);
+}
+
+TEST(SingleSkillStat_sut, SingleSkillStat_sut_count_awerage_to_Test){
+    /*arrange*/
+    std::string name = "linux";
+    SingleSkillStat skill_stat(1, name);    
+    std::list<salary_ptr_t> salary_list;
+    salary_list.push_back(std::make_unique<Salary>(100, 200));
+    salary_list.push_back(std::make_unique<Salary>(0, 200));
+    salary_list.push_back(std::make_unique<Salary>(200, 300));
+
+    /*action*/
+    int awerage_salary = skill_stat.count_awerage_salary_to(salary_list);
+
+    /*assert*/
+    EXPECT_EQ(awerage_salary, 233);
+}
+
+
 
 
 int main(int argc, char** argv)

@@ -6,30 +6,39 @@
 
 #include "salary.h"
 #include "skill.h"
+#include "vacansy.h"
 
 class SingleSkillStat{
-    const int skill_id;
-    std::string skill_name;
-    int jun_vacansies_count {0};
-    int midl_vacancies_count {0};
-    int senior_vacansies_count {0};
-    int undef_vacansies_count {0};
-    std::list<Salary> jun_salary_list;
-    std::list<Salary> mid_salary_list;
-    std::list<Salary> senior_salary_list;
-    std::list<Salary> common_salary_list;
-    int average_june_salary_from {0};
-    int average_june_salary_to {0};
-    int average_june_salary {0};
-    int averaпу_midle_salary {0};
-    int averaпу_midle_salary_from {0};
-    int averaпу_midle_salary_to {0};
-    int average_senior_salary_from {0};
-    int average_senior_salary_to {0};
-    int average_senior_salary {0};
-    int average_salary_common {0};
-    int average_salary_common_from {0};
-    int average_salary_common_to {0};
+    const int my_skill_id;
+    const std::string my_skill_name;
+    int my_jun_vacansies_count {0};
+    int my_midl_vacancies_count {0};
+    int my_senior_vacansies_count {0};
+    int my_undef_vacansies_count {0};
+    std::list<salary_ptr_t> my_jun_salary_list;
+    std::list<salary_ptr_t> my_mid_salary_list;
+    std::list<salary_ptr_t> my_senior_salary_list;
+    std::list<salary_ptr_t> my_common_salary_list;
+    int my_average_june_salary_from {0};
+    int my_average_june_salary_to {0};
+    int my_average_june_salary {0};
+    int my_averaпу_midle_salary {0};
+    int my_averaпу_midle_salary_from {0};
+    int my_averaпу_midle_salary_to {0};
+    int my_average_senior_salary_from {0};
+    int my_average_senior_salary_to {0};
+    int my_average_senior_salary {0};
+    int my_average_salary_common {0};
+    int my_average_salary_common_from {0};
+    int my_average_salary_common_to {0};
+    std::vector<int> my_friend_skills;
+public:
+    SingleSkillStat(int id, std::string & name) : my_skill_id(id), my_skill_name(name) {};
+    int count_awerage_salary(std::list<salary_ptr_t> & jun_salary_list);
+    int count_awerage_salary_from(std::list<salary_ptr_t> & jun_salary_list);
+    int count_awerage_salary_to(std::list<salary_ptr_t> & jun_salary_list);
+    void add_to_stat(ApplicantLevel level, salary_ptr_t && salary, std::queue<int> & friend_skills);
+
 };
 
 class SkillStatistic{

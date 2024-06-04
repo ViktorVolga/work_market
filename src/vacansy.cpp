@@ -162,7 +162,7 @@ HHVacansy::HHVacansy(const json &vacansy_json)
 }
 
 HHVacansy::HHVacansy(int id, std::string && name, std::string && country, std::string && city, std::string && company, int salary_from, int salary_to, 
-    std::string && expirience, std::string && description, std::vector<skill_represent_ptr_t> & skills, Level level, std::string && schedule)
+    std::string && expirience, std::string && description, std::vector<skill_represent_ptr_t> & skills, ApplicantLevel level, std::string && schedule)
 {
     set_my_id(id);
     set_my_name(name);
@@ -211,7 +211,7 @@ void Vacansy::add_my_skill(skill_represent_ptr_t && skill)
     my_skills.push_back(std::move(skill));     //   push_back(skill);
 }
 
-void Vacansy::set_my_level(Level level)
+void Vacansy::set_my_level(ApplicantLevel level)
 {    
     my_level = level;   
 }
@@ -223,7 +223,7 @@ skill_represent_ptr_t Vacansy::get_my_skill()
     return std::move(skill);
 }
 
-Level Vacansy::get_my_level()
+ApplicantLevel Vacansy::get_my_level()
 {    
     return my_level;
 }
@@ -263,16 +263,16 @@ std::ostream & operator<<(std::ostream &stream, const Vacansy &vacansy)
     }    
     stream << "level: ";
     switch (vacansy.my_level){
-        case Level::june :
+        case ApplicantLevel::june :
             stream << "june";
             break;
-        case Level::midle :
+        case ApplicantLevel::midle :
             stream << "midle";
             break;
-        case Level::senior :
+        case ApplicantLevel::senior :
             stream << "senior";
             break;
-        case Level::unknown :
+        case ApplicantLevel::unknown :
             stream << "unknown";
             break;
         default :
@@ -388,13 +388,13 @@ std::istream &operator>>(std::istream &stream, Vacansy &vacansy)
     /*level*/
     std::getline(stream, temp);
     if (temp == "level: unknown"){
-        vacansy.my_level = Level::unknown;
+        vacansy.my_level = ApplicantLevel::unknown;
     } else if (temp == "level: june"){        
-        vacansy.my_level = Level::june;        
+        vacansy.my_level = ApplicantLevel::june;        
     } else if (temp == "level: midle"){
-        vacansy.my_level = Level::midle;
+        vacansy.my_level = ApplicantLevel::midle;
     } else if (temp == "level: senior"){
-        vacansy.my_level = Level::senior;
+        vacansy.my_level = ApplicantLevel::senior;
     }
 
     /*shedule*/

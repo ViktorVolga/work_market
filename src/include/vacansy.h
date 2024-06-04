@@ -20,7 +20,7 @@ enum class Expirience
     more_three_year,
 };
 
-enum class Level
+enum class ApplicantLevel
 {
     june,
     midle,
@@ -51,7 +51,7 @@ class Vacansy
     Expirience my_expirience {};
     std::string my_description {};
     std::vector<skill_represent_ptr_t> my_skills {};
-    Level my_level {3};
+    ApplicantLevel my_level {3};
     std::string my_schedule {}; 
     std::queue<std::string> my_candidats_to_skills {};   
 public:
@@ -84,9 +84,9 @@ public:
     friend std::ostream& operator<< (std::ostream& stream, const Vacansy& vacansy);
     void add_my_skill(skill_represent_ptr_t && skill);
     friend std::istream& operator>> (std::istream& stream, Vacansy& vacansy); 
-    void set_my_level(Level level);
+    void set_my_level(ApplicantLevel level);
     skill_represent_ptr_t get_my_skill();
-    Level get_my_level();
+    ApplicantLevel get_my_level();
     const std::string & get_my_schedule(); 
 };
 
@@ -97,6 +97,6 @@ public:
     HHVacansy(const json & vacansy_json);
     HHVacansy(int id, std::string && name, std::string && country, std::string && city, std::string && company, int salary_from,
         int salary_to, std::string && expirience, std::string && description, std::vector<skill_represent_ptr_t> & skills, 
-        Level level, std::string && schedule);
+        ApplicantLevel level, std::string && schedule);
     void save() override;
 };

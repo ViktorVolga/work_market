@@ -13,7 +13,7 @@ TEST(SkillStatistic_sut, save_and_read_from_file){
     std::vector<skill_represent_ptr_t> skills;    
     skills.push_back(std::make_unique<SkillRepresentation>(1, "linux"));
     HHVacansy vacansy(666666, "test_vacansy", "Russia", "Samara", "Volga Software", 
-        100000, 140000, "noExpirience", "good vacansy for a friends", skills, Level::june, "fullDay");    
+        100000, 140000, "noExpirience", "good vacansy for a friends", skills, ApplicantLevel::june, "fullDay");    
       
     const fs::path vacansy_path{"test_vacansy"};    
     std::ofstream vacansy_out_stream(vacansy_path, std::ios::out | std::ios::trunc);
@@ -33,7 +33,7 @@ TEST(SkillStatistic_sut, save_and_read_from_file){
     EXPECT_EQ(vacansy_from_file->get_my_expirience(), Expirience::no_expirince); 
     EXPECT_EQ(vacansy_from_file->get_my_descripton(), "good vacansy for a friends"); 
     EXPECT_EQ(vacansy_from_file->get_my_skill()->my_id, 1);    
-    EXPECT_EQ(static_cast<int>(vacansy_from_file->get_my_level()), static_cast<int>(Level::june));
+    EXPECT_EQ(static_cast<int>(vacansy_from_file->get_my_level()), static_cast<int>(ApplicantLevel::june));
     EXPECT_EQ(vacansy_from_file->get_my_schedule(), "fullDay");
 }
 

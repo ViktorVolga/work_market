@@ -36,7 +36,13 @@ class Skill{
         {43, "css"}, {44, "docker"}, {45, "go"}, {46, "html"}, {47, "hibernate framework"}, {48, "jdbc standart"},
         {49, "jvm"}, {50, "mvc framework"}, {51, "mapstruct lib"}, {52, "maven framework"}, {53, "rpm"}, {54, "lisp"}, 
         {55, "quemu"}, {56, "yocto"}, {57, "qt"}, {58, "simulink"}, {59, "nginx"}, {60, "uml"}, {61, "math"}, {62, "physics"},
-        {63, "json-rpc"}, {64, "1C"}
+        {63, "json-rpc"}, {64, "1C"}, {65, "t-sql"}, {66, "assembler"}, {67, "OllyDBG"}, {68, "Hiew"}, {69, "ida"}, {70, "windows"},
+        {71, "dos"}, {72, "stm32"}, {73, "node.js"}, {74, "protobuf"}, {75, "gRPC"}, {76, "kafka"}, {77, "PosgreSQL"}, 
+        {78, "Cassandra"}, {79, "Scylla"}, {80, "ClickHouse"}, {81, "NSQ"}, {82, "RabbitMQ"}, {83, "Kubernetes"},
+        {84, "Kibana"}, {85, "Elastic"}, {86, "Grafana"}, {87, "Prometheus"}, {88, "Unit tests"}, {89, "WireShark"},
+        {90, "Directus"}, {91, "ProtoActors"}, {92, "Debian"}, {93, "PHP"}, {94, "ARM"}, {95, "DMA"}, {96, "USB"},
+        {97, "UART"}, {98, "SPI"}, {99, "I2C"}, {100, "CAN"}, {101, "realtime os"}, {102, "ISO-7816"}, {103, "Bluetooth"},
+        {104, "NFC"}
     };
     std::map<std::string, int> my_skills{
         {"linux", 1},
