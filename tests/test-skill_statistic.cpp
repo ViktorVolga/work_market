@@ -79,6 +79,23 @@ TEST(SingleSkillStat_sut, SingleSkillStat_sut_count_awerage_to_Test){
     EXPECT_EQ(awerage_salary, 233);
 }
 
+TEST(SingleSkillStat_sut, SingleSkillStat_add_to_skill_stat_Test){
+    /*arrange*/
+    std::string name = "linux";
+    SingleSkillStat skil_stat = SingleSkillStat(1, name);
+    std::queue<int> friend_queue;
+    friend_queue.push(2);
+    friend_queue.push(1);
+
+    
+    /*action*/
+    skil_stat.add_to_stat(ApplicantLevel::senior, std::make_unique<Salary>(90000, 10000), friend_queue);
+
+    /*asset*/
+    EXPECT_EQ(skil_stat.get_my_senior_vacansies_count(), 1);
+    EXPECT_EQ(skil_stat.get_count_senior_salaries_saved(), 1);
+    EXPECT_EQ(skil_stat.get_my_friend_skills().at(2), 1);
+}
 
 
 

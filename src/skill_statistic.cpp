@@ -131,3 +131,18 @@ void SingleSkillStat::add_to_stat(ApplicantLevel level, salary_ptr_t && salary, 
             break;
     }
 }
+
+int SingleSkillStat::get_my_senior_vacansies_count()
+{
+    return my_senior_vacansies_count;
+}
+
+int SingleSkillStat::get_count_senior_salaries_saved()
+{
+    return static_cast<int>(my_senior_salary_list.size());
+}
+
+std::vector<int> &SingleSkillStat::get_my_friend_skills()
+{
+    return my_friend_skills;
+}

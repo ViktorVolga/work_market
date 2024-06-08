@@ -33,12 +33,16 @@ class SingleSkillStat{
     int my_average_salary_common_to {0};
     std::vector<int> my_friend_skills;
 public:
-    SingleSkillStat(int id, std::string & name) : my_skill_id(id), my_skill_name(name) {};
+    SingleSkillStat(int id, std::string & name) : my_skill_id(id), my_skill_name(name) {
+        my_friend_skills.resize(get_skills()->get_etalon_skills_count());
+    };
     int count_awerage_salary(std::list<salary_ptr_t> & jun_salary_list);
     int count_awerage_salary_from(std::list<salary_ptr_t> & jun_salary_list);
     int count_awerage_salary_to(std::list<salary_ptr_t> & jun_salary_list);
     void add_to_stat(ApplicantLevel level, salary_ptr_t && salary, std::queue<int> & friend_skills);
-
+    int get_my_senior_vacansies_count();
+    int get_count_senior_salaries_saved();
+    std::vector<int> & get_my_friend_skills();
 };
 
 class SkillStatistic{
