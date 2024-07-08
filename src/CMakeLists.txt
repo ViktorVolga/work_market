@@ -5,6 +5,8 @@ target_include_directories(request_handler PUBLIC include)
 set(spdlog_DIR "/home/libs/spdlog/build/")
 find_package(spdlog REQUIRED)
 
+add_library(salary salary.cpp)
+target_include_directories(salary PUBLIC include)
 
 add_library(spdlog SHARED IMPORTED)
 target_link_libraries(request_handler spdlog::spdlog)
@@ -25,18 +27,41 @@ include(FetchContent)
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
 FetchContent_MakeAvailable(json)
 
-target_link_libraries(request_handler nlohmann_json::nlohmann_json)
+target_link_libraries(request_handler nlohmann_json::nlohmann_json vacansy_saver)
 
-add_library(vacansy vacansy.cpp vacansy_handler.cpp)
+add_library(vacansy vacansy.cpp vacansy_handler.cpp skill_parser.cpp)
 target_include_directories(vacansy PUBLIC include)
+target_link_libraries(vacansy nlohmann_json::nlohmann_json spdlog::spdlog skill_statistic)
 
 set(Boost_USE_STATIC_LIBS OFF) 
 set(Boost_USE_MULTITHREADED ON)  
 set(Boost_USE_STATIC_RUNTIME OFF) 
-find_package(Boost 1.82 COMPONENTS program_options) 
+find_package(Boost 1.82 COMPONENTS program_options locale
+REQUIRED) 
 
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS}) 
     add_library(intro intro.cpp) 
     target_link_libraries(intro ${Boost_LIBRARIES})
+    add_definitions( -DBOOST_ALL_NO_LIB )
+    add_definitions( -DBOOST_ALL_DYN_LINK )
 endif()
+
+add_library(skill skill.cpp)
+target_include_directories(skill PUBLIC include)
+target_link_libraries(skill vacansy spdlog::spdlog)
+
+add_library(skill_parser skill_parser.cpp)
+target_include_directories(skill_parser PUBLIC include)
+target_link_libraries(skill_parser vacansy skill spdlog::spdlog Boost::locale)
+
+
+target_link_libraries(vacansy skill Boost::locale salary)
+
+add_library(vacansy_saver vacansy_saver.cpp)
+target_include_directories(vacansy_saver PUBLIC include)
+target_link_libraries(vacansy_saver vacansy)
+
+add_library(skill_statistic skill_statistic.cpp)
+target_include_directories(skill_statistic PUBLIC include)
+target_link_libraries(skill_statistic skill salary)

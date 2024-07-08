@@ -11,8 +11,14 @@ void RequestHandler::add_request(request_t &req)
 {
     if(req != nullptr)
     {
-        my_req_queue.push(std::move(req));
-        web_logger()->info("added request in queue");
+        if(req->get_request_type() == request_type_t::HHVacansyRequest){
+            my_vacansy_req_queue.push(std::move(req));
+            web_logger()->info("added vacansy request in queue");
+        } else {
+            my_req_queue.push(std::move(req));
+            web_logger()->info("added request in queue");
+        }
+        
     }
     else
     {
@@ -81,9 +87,11 @@ void RequestHandler::print_mum_requests_in_queue()
 }
 
 void  RequestHandler::add_vacansy(vacansy_ptr_t vacansy)
-{
-    if(my_vacansy_handler_ptr)
+{    
+    if(my_vacansy_handler_ptr){
         my_vacansy_handler_ptr->add_vacansy_to_queue(std::move(vacansy));
+        web_logger()->info("RequestHandler::add_vacansy vacansy added to queue");
+    }        
     else  
         web_logger()->error("[RequestHandler::add_vacansy] my_vacansy_handler_ptr - nullptr");
 }
@@ -91,7 +99,8 @@ void  RequestHandler::add_vacansy(vacansy_ptr_t vacansy)
 void RequestHandler::add_vacansy_request(request_t request)
 {
     my_vacansy_req_queue.push(std::move(request));
-    web_logger()->info("vacansy request pushed in queue");
+    web_logger()->info("[RequestHandler::add_vacansy_request] number of vacansy in queue {}", 
+        my_vacansy_req_queue.size());
 }
 
 /*
@@ -104,21 +113,30 @@ int RequestHandler::handle_one_request()
 {
     if(!my_vacansy_req_queue.empty())
     {
-        web_logger()->info("[handle_one_request] - take one vacansy request");
+        web_logger()->debug("[handle_one_request] - take one vacansy request");
         my_request = std::move(my_vacansy_req_queue.front());
         my_vacansy_req_queue.pop();
         my_request->execute_request();
         my_request_parser = my_rpf->get_request_parser(this, my_request->get_request_type());
         my_request_parser->parse(my_request);
+        vacansy_handled++;
+        web_logger()->info("Handled vacansies {}", vacansy_handled);
         return 1;
     }
     if(!my_req_queue.empty())
     {
-        my_request = std::move(my_vacansy_req_queue.front());
-        my_vacansy_req_queue.pop();
+        my_request = std::move(my_req_queue.front());
+        my_req_queue.pop();
         my_request->execute_request();
         my_request_parser = my_rpf->get_request_parser(this, my_request->get_request_type());
-        my_request_parser->parse(my_request);
+        if(!my_request_parser){
+            web_logger()->error("[handle_one_request] - request parser fabrica retturn error");
+        } else {
+            my_request_parser->parse(my_request);
+            requests_handled++;
+        }   
+            
+        web_logger()->info("Handled requests {}", requests_handled);
         return 2;
     }
     /*if we here - it meas what noyhing to do else*/
@@ -129,4 +147,20 @@ void RequestHandler::set_first_request()
 {
     request_t request = std::make_unique<ProfessionRequest>(specializations_t::cpp);        
     add_request(request);
+}
+
+bool RequestHandler::is_empty()
+{
+    return my_req_queue.empty();
+}
+
+bool RequestHandler::is_vacansy_requests_empty()
+{
+    return my_vacansy_req_queue.empty();
+}
+
+void RequestHandler::add_to_to_handled()
+{
+    vacansy_handled++;
+    web_logger()->info("vacansies downloaded or already on hard disc {}", vacansy_handled);
 }

@@ -7,11 +7,17 @@
 #include "request_parser.h"
 #include "request_handler.h"
 #include "vacansy_handler.h"
+#include "vacansy_saver.h"
+#include <chrono>
+#include <thread>
+#include "logger.h"
+#include "skill_statistic.h"
 
 class App
 {    
     RequestHandlerPtr_t my_request_handler;
     VacansyHandlerPtr_t my_vacansy_handler;
+    
 public:
     App();
     void first_request();

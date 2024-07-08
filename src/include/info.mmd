@@ -1,0 +1,7 @@
+stateDiagram-v2
+HHRequestParser.parse() --> is_first_page==true
+HHRequestParser.parse() --> is_first_page==false
+
+is_first_page==true --> fill_requests_list()
+
+is_first_page==false -->

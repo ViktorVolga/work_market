@@ -1,10 +1,16 @@
 #include "include/request_parser.h"
 #include "request_parser.h"
 #include "request_handler.h"
+#include "vacansy.h"
 
 RequestParser::RequestParser(RequestHandler * rh)
 {
     my_handler = rh;
+}
+
+json & RequestParser::get_my_json()
+{
+    return my_json;
 }
 
 void HHRequestParser::parse(request_t & req){
@@ -17,10 +23,25 @@ void HHRequestParser::parse(request_t & req){
         int num_pages = get_my_request_handler()->get_num_pages_in_request(req);
         fill_requests_list(num_pages, req);
     }
-    for (auto & item : my_json["items"])
+    for (auto & item : get_my_json()["items"])
     {
-        std::string vacansy_url = item["alternate_url"].template get<std::string>();
-        request_t vacansy_request = std::make_unique<HHVacansyRequest>(&vacansy_url);
+        std::string vacansy_url = item["url"].template get<std::string>();
+        int id = boost::lexical_cast<int>(item["id"].template get<std::string>());
+        std::shared_ptr<VacansySaver> vs = get_vacansy_saver_ptr();
+        SaveAsJson * vacansy_saver = dynamic_cast<SaveAsJson*>(vs.get());
+        bool is_saved = false;
+        request_t vacansy_request = std::make_unique<HHVacansyRequest>(&vacansy_url, id);
+        if(vacansy_saver){
+            is_saved = vacansy_saver->is_saved(vacansy_request.get());
+        }
+        if(!is_saved){
+            get_my_request_handler()->add_vacansy_request(std::move(vacansy_request));
+        } else {            
+            get_my_request_handler()->add_vacansy(vacansy_saver->read_vacansy(id));
+            web_logger()->info("added vacansy from file");
+        }
+        get_my_request_handler()->add_to_to_handled();
+
     }    
 }
 
@@ -49,7 +70,7 @@ bool HHRequestParser::is_first_page(request_t & req)
         return false;    
 }
 
-std::string * HHRequestParser::get_string_from_request(request_t & req)
+std::string * RequestParser::get_string_from_request(request_t & req)
 {
     if(req != nullptr)
         return req->get_response();    
@@ -68,12 +89,12 @@ void HHRequestParser::trim_answer(request_t & req)
     answer->erase(answer->begin(), start_json);
 }
 
-void HHRequestParser::get_json(request_t & req)
+void RequestParser::get_json(request_t & req)
 {
     using namespace nlohmann::literals;
     std::string * answer = get_string_from_request(req);
     my_json = json::parse(*answer);
-    std::cout << my_json;
+    //std::cout << my_json;
 }
 
 void HHRequestParser::fill_requests_list(int num_pages, request_t &req)
@@ -97,9 +118,46 @@ request_parser_t RequestParserFabrica::get_request_parser(RequestHandler * rh, r
     {
         case request_type_t::HHProfRequest :
             return std::make_unique<HHRequestParser>(rh);
-            
+            break;
+
+        case request_type_t::HHVacansyRequest :
+            return std::make_unique<HHVacansyRequestParser>(rh);
+            break;
+
+        case request_type_t::HHProfRequestPage :
+            return std::make_unique<HHRequestParser>(rh);
+            break;
+
         default:
+            web_logger()->error("[RequestParserFabrica::get_request_parser] in default case");            
             return nullptr;
+            break;
     }
+    web_logger()->error("[RequestParserFabrica::get_request_parser] i don't go to switch");  
     return nullptr;
+}
+
+void HHVacansyRequestParser::parse(request_t & req)
+{
+    web_logger()->debug("HHVacansyRequestParser::parse - start");
+    trim_answer(req);
+    get_json(req);
+    json & my_json = get_my_json();
+    std::unique_ptr<Vacansy> new_vacansy = std::make_unique<HHVacansy>(my_json);
+    get_my_request_handler()->add_vacansy(std::move(new_vacansy));
+    web_logger()->debug("HHVacansyRequestParser::parse - end");
+}
+
+void HHVacansyRequestParser::trim_answer(request_t & req)
+{
+    web_logger()->debug("HHVacansyRequestParser::trim_answer - start");
+    std::string * answer = get_string_from_request(req);
+    if(answer->empty())
+    {
+        web_logger()->error("HHRequestParser::trim_answer - answer is empty");
+        return;        
+    }    
+    auto start_json = std::next(answer->begin(), answer->find("{\"id\""));
+    answer->erase(answer->begin(), start_json);
+    web_logger()->debug("HHVacansyRequestParser::trim_answer - end");
 }

@@ -8,9 +8,9 @@ static int ptr_count;
 static size_t write_answer(void *data, size_t size, size_t nmemb, char *userdata)
 {
     size_t str_length = nmemb * size;
-    memmove(userdata + ptr_count, data, str_length);
-    ptr_count += str_length;
-    /*try
+    //memmove(userdata + ptr_count, data, str_length);
+    //ptr_count += str_length;
+    try
     {
        answer.append((char*)data, str_length); 
     }
@@ -18,7 +18,7 @@ static size_t write_answer(void *data, size_t size, size_t nmemb, char *userdata
     {
         web_logger()->error("can't alloc memory [{}]", e.what());
         return 0;        
-    }*/    
+    }    
     return str_length;
 }
 
@@ -50,17 +50,18 @@ void Request::set_options()
     list = curl_slist_append(list, my_header.c_str());
     curl_easy_setopt(my_curl, CURLOPT_HTTPHEADER, list);    
     //curl_easy_setopt(my_curl, CURLOPT_WRITEFUNCTION, write_answer);
-    web_logger()->info("set_options: ok");   
+    web_logger()->debug("set_options: ok");   
 }
 
 void Request::take_answer()
 {   
     /*todo later reserve can throw exception*/
-    my_response.resize(116000);
+    answer.clear();
+    //my_response.resize(200000);
     //my_data = std::make_unique<char>(CURL_MAX_WRITE_SIZE);
-    ptr_count = 0;           
+    //ptr_count = 0;           
     curl_easy_setopt(my_curl, CURLOPT_WRITEFUNCTION, write_answer);
-    curl_easy_setopt(my_curl, CURLOPT_WRITEDATA, (void*)my_response.data());      
+    //curl_easy_setopt(my_curl, CURLOPT_WRITEDATA, (void*)answer.data());      
     response = curl_easy_perform(my_curl);
     if(response != CURLE_OK)
     {
@@ -68,15 +69,16 @@ void Request::take_answer()
     }
     else
     {
-        web_logger()->info("take_answer - ok");        
+        web_logger()->debug("take_answer - ok");        
     }    
-    web_logger()->info("readed {} byte from API", ptr_count);
-    my_response.resize(ptr_count);                   
+    web_logger()->debug("readed {} byte from API", ptr_count);
+    
+    my_response = std::move(answer);                       
 }
 
 void Request::print_answer()
 {
-    std::cout << my_response << std::endl;
+    //std::cout << my_response << std::endl;
 }
 
 void Request::add_options_in_request(const std::string &options)
@@ -150,7 +152,7 @@ void Request::print_transaction_info()
 {    
     char *info;
     curl_easy_getinfo(my_curl, CURLINFO_EFFECTIVE_URL, &info);
-    web_logger()->info("last url [{}]", info);
+    web_logger()->debug("last url [{}]", info);
 }
 
 /*
@@ -186,7 +188,7 @@ std::string ProfessionRequest::get_from_api(const vacansy_parameters &parameter,
     set_options();
     add_standart_option(parameter, request);    
     take_answer();
-    print_answer();
+    //print_answer();
     return answer;    
 }
 
@@ -194,7 +196,7 @@ std::string ProfessionRequest::get_from_api(const vacansy_parameters &parameter,
 size_t Request::read_from_api(void *ptr, size_t size, size_t nmemb, void* userdata)
 {
     ssize_t realsize = size * nmemb;
-    web_logger()->info("{}", realsize); 
+    web_logger()->debug("{}", realsize); 
     try
     {
        my_response.append((char*)ptr, realsize); 
@@ -239,7 +241,7 @@ void ProfessionRequest::set_specialization()
         case specializations_t::cpp :
         {
             add_standart_option(vacansy_parameters::specialization, "с%2B%2B");
-            web_logger()->info("set cpp in request");
+            web_logger()->debug("set cpp in request");
             break;
         }
         default :
@@ -282,7 +284,7 @@ HHProfRequestPage::HHProfRequestPage(request_t & request, int page_num)
 void HHProfRequestPage::execute_request()
 {
     take_answer();
-    print_answer();
+    //print_answer();
 }
 
 HHProfRequestPage::~HHProfRequestPage()
@@ -316,10 +318,28 @@ HHVacansyRequest::HHVacansyRequest(std::string * address)
     set_url();
 }
 
-void HHVacansyRequest::execute_request()
+HHVacansyRequest::HHVacansyRequest(std::string *address, int id)
 {
+    set_url(address);
+
+    /*init curl*/
+    auto ret = init_my_curl();    
+    if (ret)
+    {
+        web_logger()->error("filed to init_my_curl");
+    }
+    set_options();
+
+    /*set url to curl*/
+    set_url();
+
+    my_id = id;
+}
+
+void HHVacansyRequest::execute_request()
+{    
     take_answer();
-    print_answer();
+    //print_answer();
 }
 
 request_type_t HHVacansyRequest::get_request_type()
@@ -330,4 +350,9 @@ request_type_t HHVacansyRequest::get_request_type()
 std::string HHVacansyRequest::get_from_api(const vacansy_parameters &parameter, const std::string &request)
 {
     return ("fix me later");
+}
+
+const int &HHVacansyRequest::get_id()
+{
+    return my_id;
 }
