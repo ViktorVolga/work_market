@@ -40,11 +40,14 @@ void VacansyHandler::handle_one_vacansy()
         skill_parser_t parser = spf.get_skill_parser();
 
         /*here we find skills in description of vacansy*/
-        parser->parse(my_vacancy.get());
+        parser->parse(my_vacancy.get());       
 
         if (!vacansy_saver_ptr_t)
-        vacansy_saver_ptr_t =  get_vacansy_saver_ptr();
+            vacansy_saver_ptr_t =  get_vacansy_saver_ptr();
         vacansy_saver_ptr_t->resolve_save(my_vacancy);
+
+        skill_stat_ptr_t stat = get_skill_stat_ptr();
+        stat->add_to_skills(my_vacancy);
 
     }
     web_logger()->info("[VacansyHandler::handle_one_vacansy] - vacansy handled");

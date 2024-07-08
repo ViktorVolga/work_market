@@ -3,7 +3,7 @@
 App::App()
 {
     my_vacansy_handler = std::make_shared<VacansyHandler>();
-    my_request_handler = std::make_shared<RequestHandler>(my_vacansy_handler);    
+    my_request_handler = std::make_shared<RequestHandler>(my_vacansy_handler);     
 }
 
 void App::first_request()
@@ -16,6 +16,7 @@ void App::run()
 {
     using namespace std::chrono_literals;
     skill_ptr_t skill = get_skills();
+    skill_stat_ptr_t statistic = get_skill_stat_ptr();
     skill->read_my_dictionaries();
     std::shared_ptr<VacansySaver> vs = get_vacansy_saver_ptr();
     first_request();
@@ -31,6 +32,8 @@ void App::run()
             //std::this_thread::sleep_for(50ms);
             count--;
         }
-    }    
-    skill->write_to_file();   
+    }
+    skill->write_to_file();
+    statistic->sort_skill_by_count();
+    statistic->print_stat();
 }

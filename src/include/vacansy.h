@@ -87,7 +87,8 @@ public:
     void set_my_level(ApplicantLevel level);
     skill_represent_ptr_t get_my_skill();
     ApplicantLevel get_my_level();
-    const std::string & get_my_schedule(); 
+    const std::string & get_my_schedule();
+    std::vector<skill_represent_ptr_t> & get_my_skills();
 };
 
 class HHVacansy : public Vacansy {

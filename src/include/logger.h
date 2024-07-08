@@ -45,7 +45,7 @@ static const std::shared_ptr<spdlog::logger>& skill_logger()
         console_sink->set_level(spdlog::level::info);
         
         spdlog::sink_ptr file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("~/logs/web.log", true);
-        file_sink->set_level(spdlog::level::debug);
+        file_sink->set_level(spdlog::level::info);
 
         spdlog::sinks_init_list sink_list = { file_sink, console_sink }; 
         

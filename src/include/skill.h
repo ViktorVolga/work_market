@@ -42,7 +42,7 @@ class Skill{
         {84, "Kibana"}, {85, "Elastic"}, {86, "Grafana"}, {87, "Prometheus"}, {88, "Unit tests"}, {89, "WireShark"},
         {90, "Directus"}, {91, "ProtoActors"}, {92, "Debian"}, {93, "PHP"}, {94, "ARM"}, {95, "DMA"}, {96, "USB"},
         {97, "UART"}, {98, "SPI"}, {99, "I2C"}, {100, "CAN"}, {101, "realtime os"}, {102, "ISO-7816"}, {103, "Bluetooth"},
-        {104, "NFC"}
+        {104, "NFC"}, {105, "Javascript"}, {106, "Kotlin"}, {107, "Redis"}, {108, "VueJS"}
     };
     std::map<std::string, int> my_skills{
         {"linux", 1},
@@ -65,8 +65,8 @@ class Skill{
         {"Json", 14},
         {"Flask", 15},
         {"fast API", 16},
-        {".NET", 17},
-        {"Javascript", 18}, 
+        {".NET", 17}
+         
     };
     std::map<std::string, int> my_multy_word_skills{
         {"стандартные алгоритмы и структуры данных", 4},

@@ -233,6 +233,11 @@ const std::string & Vacansy::get_my_schedule()
     return my_schedule;
 }
 
+std::vector<skill_represent_ptr_t> &Vacansy::get_my_skills()
+{
+    return my_skills;
+}
+
 std::ostream & operator<<(std::ostream &stream, const Vacansy &vacansy)
 {    
     stream << "id: " << boost::lexical_cast<std::string>(vacansy.my_id) << std::endl;

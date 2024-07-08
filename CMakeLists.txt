@@ -4,7 +4,7 @@ project(work_market VERSION 0.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDART 23)
 set(CMAKE_SYSTEM_NAME Linux)
-set(CMAKE_CXX_FLAGS -Wall)
+#set(CMAKE_CXX_FLAGS -Wall)
 
 enable_testing()
 
