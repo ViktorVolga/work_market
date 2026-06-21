@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.5)
 
 project(work_market VERSION 0.0.0 LANGUAGES CXX)
 
@@ -42,4 +42,4 @@ FetchContent_MakeAvailable(json)
 
 #target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
 
-target_link_libraries(work_market intro)
+target_link_libraries(work_market intro sql)

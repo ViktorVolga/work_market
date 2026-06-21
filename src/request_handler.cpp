@@ -97,7 +97,7 @@ void  RequestHandler::add_vacansy(vacansy_ptr_t vacansy)
 }
 
 void RequestHandler::add_vacansy_request(request_t request)
-{
+{    
     my_vacansy_req_queue.push(std::move(request));
     web_logger()->info("[RequestHandler::add_vacansy_request] number of vacansy in queue {}", 
         my_vacansy_req_queue.size());

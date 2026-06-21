@@ -47,6 +47,10 @@ if(Boost_FOUND)
     add_definitions( -DBOOST_ALL_DYN_LINK )
 endif()
 
+#find_package(Boost REQUIRED COMPONENTS charconv)
+find_package(Threads REQUIRED)
+find_package(OpenSSL REQUIRED)
+
 add_library(skill skill.cpp)
 target_include_directories(skill PUBLIC include)
 target_link_libraries(skill vacansy spdlog::spdlog)
@@ -60,8 +64,13 @@ target_link_libraries(vacansy skill Boost::locale salary)
 
 add_library(vacansy_saver vacansy_saver.cpp)
 target_include_directories(vacansy_saver PUBLIC include)
-target_link_libraries(vacansy_saver vacansy)
+target_link_libraries(vacansy_saver vacansy sql)
 
 add_library(skill_statistic skill_statistic.cpp)
 target_include_directories(skill_statistic PUBLIC include)
 target_link_libraries(skill_statistic skill salary)
+
+add_library(sql sql_io.cpp)
+target_include_directories(sql PUBLIC include)
+target_link_libraries(sql spdlog::spdlog Threads::Threads OpenSSL::Crypto OpenSSL::SSL)
+

@@ -48,7 +48,6 @@ void VacansyHandler::handle_one_vacansy()
 
         skill_stat_ptr_t stat = get_skill_stat_ptr();
         stat->add_to_skills(my_vacancy);
-
     }
     web_logger()->info("[VacansyHandler::handle_one_vacansy] - vacansy handled");
 }

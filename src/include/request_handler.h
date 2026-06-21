@@ -3,6 +3,7 @@
 #include "request_parser.h"
 #include "vacansy_handler.h"
 #include "logger.h"
+#include "vacansy_saver.h"
 
 //class VacansyHandler;
 

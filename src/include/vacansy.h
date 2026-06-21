@@ -59,7 +59,7 @@ public:
     void set_my_id(int id);
     int get_my_id();
     void set_my_name(std::string name);
-    const std::string & get_my_name();
+    std::string & get_my_name();
     void set_my_country(std::string &country);
     const std::string & get_my_country();
     void set_my_city(std::string city);
@@ -68,7 +68,7 @@ public:
     bool get_is_open();
     void set_my_url(std::string &url);
     const std::string & get_my_url();
-    void set_my_company(std::string & company);
+    void set_my_company(std::string company);
     const std::string & get_my_company();
     void set_my_salary(int min_salary, int max_salary);
     const int & get_my_rub_salary_from();

@@ -78,7 +78,7 @@ void Request::take_answer()
 
 void Request::print_answer()
 {
-    //std::cout << my_response << std::endl;
+    std::cout << my_response << std::endl;
 }
 
 void Request::add_options_in_request(const std::string &options)

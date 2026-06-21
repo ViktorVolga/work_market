@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/home/libs/spdlog/include",
-                "/usr/include/mysql"
+                "/usr/include/mysql",
+                "${workspaceFolder}/src/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

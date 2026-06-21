@@ -50,7 +50,7 @@ void Vacansy::set_my_name(std::string name)
     my_name = name;
 }
 
-const std::string & Vacansy::get_my_name()
+std::string & Vacansy::get_my_name()
 {
     return my_name;
 }
@@ -76,7 +76,7 @@ const std::string &Vacansy::get_my_city()
     return my_city;
 }
 
-void Vacansy::set_my_company(std::string &company)
+void Vacansy::set_my_company(std::string company)
 {
     my_company = company;
 }
@@ -142,6 +142,7 @@ HHVacansy::HHVacansy(const json &vacansy_json)
     set_my_id(stoi(vacansy_json["id"].template get<std::string>()));
     set_my_name(vacansy_json["name"].template get<std::string>());
     set_my_city(vacansy_json["area"]["name"].template get<std::string>());
+    set_my_company(vacansy_json["employer"]["name"].template get<std::string>());
     try{
         min_salary = vacansy_json["salary"]["from"].template get<int>();
     }

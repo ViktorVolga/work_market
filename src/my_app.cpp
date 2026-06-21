@@ -3,7 +3,8 @@
 App::App()
 {
     my_vacansy_handler = std::make_shared<VacansyHandler>();
-    my_request_handler = std::make_shared<RequestHandler>(my_vacansy_handler);     
+    my_request_handler = std::make_shared<RequestHandler>(my_vacansy_handler); 
+    m_sql_connect = std::make_unique<SQL_IO>("root", "12345", "work_market_vacansies");   
 }
 
 void App::first_request()
@@ -20,17 +21,14 @@ void App::run()
     skill->read_my_dictionaries();
     std::shared_ptr<VacansySaver> vs = get_vacansy_saver_ptr();
     first_request();
-    int count = 1;
-    while(!my_request_handler->is_empty() || !my_vacansy_handler->is_empty() || !my_request_handler->is_vacansy_requests_empty()){
-    //while(count > 0){
+    //int count = 1;
+    while(!my_request_handler->is_empty() || !my_vacansy_handler->is_empty() || !my_request_handler->is_vacansy_requests_empty()){    
         if(my_vacansy_handler->is_empty()){
             my_request_handler->handle_one_request();            
-            std::this_thread::sleep_for(1s);
-            count--;
+            std::this_thread::sleep_for(1s);            
         } else { 
             my_vacansy_handler->handle_one_vacansy();            
-            //std::this_thread::sleep_for(50ms);
-            count--;
+            std::this_thread::sleep_for(50ms);            
         }
     }
     skill->write_to_file();

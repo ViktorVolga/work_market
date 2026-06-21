@@ -16,7 +16,7 @@ static const std::shared_ptr<spdlog::logger>& web_logger()
     else
     {       
         spdlog::sink_ptr console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        console_sink->set_level(spdlog::level::info);
+        console_sink->set_level(spdlog::level::debug);
 
         spdlog::sink_ptr file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("~/logs/web.log", true);
         file_sink->set_level(spdlog::level::debug);
@@ -56,7 +56,7 @@ static const std::shared_ptr<spdlog::logger>& skill_logger()
         skill_logger_ptr = std::make_shared<spdlog::logger>(logger);           
        
         return skill_logger_ptr; 
-    }           
+    }
 }
 
 static std::shared_ptr<spdlog::logger> app_logger_ptr;
@@ -82,5 +82,31 @@ static const std::shared_ptr<spdlog::logger>& app_logger()
         app_logger_ptr = std::make_shared<spdlog::logger>(logger);           
        
         return app_logger_ptr; 
+    }           
+}
+
+static std::shared_ptr<spdlog::logger> sql_logger_ptr;
+
+static const std::shared_ptr<spdlog::logger>& sql_logger()
+{    
+    if(sql_logger_ptr)
+        return sql_logger_ptr; 
+    else
+    {       
+        spdlog::sink_ptr console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+        console_sink->set_level(spdlog::level::debug);
+        
+        spdlog::sink_ptr file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("~/logs/web.log", true);
+        file_sink->set_level(spdlog::level::debug);
+
+        spdlog::sinks_init_list sink_list = { file_sink, console_sink }; 
+        
+        spdlog::logger logger("sql", sink_list.begin(), sink_list.end());
+
+        logger.set_level(spdlog::level::debug);
+
+        sql_logger_ptr = std::make_shared<spdlog::logger>(logger);
+       
+        return sql_logger_ptr;
     }           
 }

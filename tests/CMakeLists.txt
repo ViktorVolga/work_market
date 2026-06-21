@@ -21,3 +21,7 @@ add_test(skill_statistic_tests test-skill_statistic)
 add_executable(test-vacansy test-vacansy.cpp)
 target_link_libraries(test-vacansy PRIVATE GTest::GTest vacansy) 
 add_test(vacansy-tests test-vacansy)
+
+add_executable(test-vacansy_saver test-vacansy_saver.cpp)
+target_link_libraries(test-vacansy_saver PRIVATE GTest::GTest vacansy_saver vacansy sql request_handler)  
+add_test(vacansy_saver-tests test-vacansy)

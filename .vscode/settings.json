@@ -72,6 +72,14 @@
         "forward_list": "cpp",
         "ranges": "cpp",
         "valarray": "cpp",
-        "span": "cpp"
-    }
+        "span": "cpp",
+        "bitset": "cpp",
+        "cfenv": "cpp",
+        "complex": "cpp",
+        "unordered_set": "cpp",
+        "fstream": "cpp",
+        "typeindex": "cpp",
+        "*.ipp": "cpp"
+    },
+    "cmake.configureOnOpen": false
 }

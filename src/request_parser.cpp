@@ -28,18 +28,14 @@ void HHRequestParser::parse(request_t & req){
         std::string vacansy_url = item["url"].template get<std::string>();
         int id = boost::lexical_cast<int>(item["id"].template get<std::string>());
         std::shared_ptr<VacansySaver> vs = get_vacansy_saver_ptr();
-        SaveAsJson * vacansy_saver = dynamic_cast<SaveAsJson*>(vs.get());
         bool is_saved = false;
         request_t vacansy_request = std::make_unique<HHVacansyRequest>(&vacansy_url, id);
-        if(vacansy_saver){
-            is_saved = vacansy_saver->is_saved(vacansy_request.get());
+        if(vs){
+            is_saved = vs->is_saved(vacansy_request.get());
         }
         if(!is_saved){
             get_my_request_handler()->add_vacansy_request(std::move(vacansy_request));
-        } else {            
-            get_my_request_handler()->add_vacansy(vacansy_saver->read_vacansy(id));
-            web_logger()->info("added vacansy from file");
-        }
+        }            
         get_my_request_handler()->add_to_to_handled();
 
     }    
